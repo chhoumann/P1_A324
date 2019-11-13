@@ -5,3 +5,7 @@ int main(void) {
     /* Hej, Victor er træls */
     /* Hej, men farvel igen*/
 }
+
+void Test(void) {
+    printf("kage smager godt");
+}
