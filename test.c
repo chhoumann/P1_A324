@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-enum unit {g, kg};
+enum unit { g, kg };
 
 typedef struct {
     char *name;
@@ -8,7 +8,7 @@ typedef struct {
     enum unit unit;
 } Recipe;
 
-void read_database();
+void read_database(void);
 
 int main(void) {
     return 0;
