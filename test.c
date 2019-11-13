@@ -1,7 +1,9 @@
 #include <stdio.h>
 
+void Test(void);
+
 int main(void) {
-    int jakobG, victor, kevinS, freddyH, christianH, marcoL, patrickO
+    int jakobG, victor, kevinS, freddyH, christianH, marcoL, patrickO;
     return 0;
     int i;
     /* Hej, Victor er træls */
