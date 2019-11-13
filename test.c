@@ -2,5 +2,5 @@
 
 int main(void) {
     return 0;
-    /* Hej */
+    /* Hej, Victor er træls */
 }
