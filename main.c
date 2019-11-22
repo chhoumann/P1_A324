@@ -7,7 +7,6 @@
 #define MAX_PROCEDURE_CHARS 1024
 #define MAX_TAGS 10
 
-typedef enum { g, kg } unit;
 const char *files[] = { "test", "test2" };
 const char *dir = "./recipes/";
 
