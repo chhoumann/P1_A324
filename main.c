@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_DIRECTORY_LENGTH 80
 #define MAX_NAME_LENGTH 50
 #define MAX_INGREDIENTS_CHARS 1024
 #define MAX_PROCEDURE_CHARS 1024
@@ -22,7 +21,7 @@ typedef struct {
 } recipe;
 
 recipe *get_database();
-char *get_file_directory(const char *fileName);
+char *get_file_directory(const char *file_name, const char *file_extension);
 
 int main(void) {    
     /* Initialize the database */
@@ -68,15 +67,15 @@ recipe get_recipe_data(FILE *fp) {
     return recipe;
 }
 
-char *get_file_directory(const char *fileName) {
-    /* Initialize directory name (string) */
-    char *directory_name = malloc(sizeof(char) * MAX_DIRECTORY_LENGTH);
+char *get_file_directory(const char *file_name, const char *file_extension) {
+    /* Allocate memory for the directory name */
+    char *directory_name = calloc(strlen(dir) + strlen(file_name) + strlen(file_extension), sizeof(char));
     
     /* Concatenate the recipe directory with the name of the file and the .txt extension */ 
     /* Format: ./recipes/fileName.txt where the dot represents the current directory */
     strcpy(directory_name, dir);
-    strcat(directory_name, fileName);
-    strcat(directory_name, ".txt");
+    strcat(directory_name, file_name);
+    strcat(directory_name, file_extension);
     
     return directory_name;
 }
@@ -91,7 +90,7 @@ recipe *get_database() {
     for (i = 0; i < n; i++) {
         /* Initialize file variable and get the file directory as a string */
         FILE *fp;
-        char *fileName = get_file_directory(files[i]);
+        char *fileName = get_file_directory(files[i], ".txt");
 
         /* Open the file using the directory name */
         fp = fopen(fileName, "r");
