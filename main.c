@@ -46,7 +46,7 @@ char *get_file_directory(const char *fileName) {
     strcpy(directory_name, dir);
     strcat(directory_name, fileName);
     strcat(directory_name, ".txt");
-
+    
     return directory_name;
 }
 
