@@ -17,7 +17,7 @@ typedef struct recipe recipe;
 
 void randomizer(recipe all_recipes[], int ugeplan[],char *user_tags);
 recipe make_recipe(char *name, char *ingredients, char *procedure, char *tags, int time);
-int check_tags_match (char *user_tags, char *recipe_tags);
+int tags_match (char *user_tags, char *recipe_tags);
 int is_duplicate(int i, int k, int *ugeplan);
 
 int main(void){
@@ -62,9 +62,9 @@ void randomizer(recipe all_recipes[], int ugeplan[], char *user_tags){
     for (i = 0 ; i < 7 ; i++){
         n = ugeplan[i] = rand() % MAX_RECIPES;
         for (k = 0 ; k < 7 ; k++){
-            if (is_duplicate(i, k, ugeplan) || !(check_tags_match(user_tags, all_recipes[n].tags))){
+            if (is_duplicate(i, k, ugeplan) || !(tags_match(user_tags, all_recipes[n].tags))){
                 i--;
-                printf("i--\n");
+                break;
             }
         }
     }
@@ -79,7 +79,7 @@ int is_duplicate(int i, int k, int *ugeplan){
     
 }
 
-int check_tags_match (char *user_tags, char *recipe_tags){
+int tags_match (char *user_tags, char *recipe_tags){
     int i, n = 0;
     int tag_len = strlen(user_tags);
 
@@ -112,18 +112,3 @@ recipe make_recipe(char *name, char *procedure, char *ingredients, char *tag, in
     
     return result;
 }
-
-/*
-randomizer.c: In function 'make_recipe':
-randomizer.c:71:5: warning: 'result.name' is used uninitialized in this function [-Wuninitialized]
-     strcpy(result.name, name);
-     ^~~~~~~~~~~~~~~~~~~~~~~~~
-randomizer.c:72:5: warning: 'result.ingredients' is used uninitialized in this function [-Wuninitialized]
-     strcpy(result.ingredients, ingredients);
-     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-randomizer.c:73:5: warning: 'result.procedure' is used uninitialized in this function [-Wuninitialized]
-     strcpy(result.procedure, procedure);
-     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-randomizer.c:74:5: warning: 'result.tags' is used uninitialized in this function [-Wuninitialized]
-     strcpy(result.tags, tag);
-*/
