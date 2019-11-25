@@ -15,10 +15,10 @@ typedef struct recipe recipe;
 int *randomizer(recipe all_recipes[], char *user_tags, int number_of_recipes);
 recipe make_recipe(char *name, char *ingredients, char *procedure, char *tags, int time);
 int tags_match (char *user_tags, char *recipe_tags);
-int is_duplicate(int i, int k, int *ugeplan);
+int is_duplicate(int i, int k, int *week_plan);
 
 int main(void){
-    int *ugeplan; 
+    int *week_plan; 
     int recipe_number, i;
     int number_of_recipes = 9;
     char *user_tags = "!&";
@@ -37,10 +37,10 @@ int main(void){
     all_recipes[8] = make_recipe("vand", "drik", "kun vand", "!*<&", 25);
     
     printf("entered tags = %s\n", user_tags);
-    ugeplan = randomizer(all_recipes, user_tags, number_of_recipes);
+    week_plan = randomizer(all_recipes, user_tags, number_of_recipes);
 
     for (i = 0; i < 7; i++){
-        recipe_number = ugeplan[i]; 
+        recipe_number = week_plan[i]; 
         printf("name: %s\n"
                "Ingredienser: %s\n"
                "Opskrift: %s\n"
@@ -48,29 +48,30 @@ int main(void){
                "tid: %d\n\n", all_recipes[recipe_number].name, all_recipes[recipe_number].ingredients,
                               all_recipes[recipe_number].procedure, all_recipes[recipe_number].tags, 
                               all_recipes[recipe_number].time);
-    }   
+    }  
+    free(week_plan); 
     return 0;
 }
 
 
 int *randomizer(recipe all_recipes[], char *user_tags, int number_of_recipes){
     int i = 0, k, n = 0;
-    int *ugeplan = malloc(sizeof(int) * 7);
-    
+    int *week_plan = malloc(sizeof(int) * 7);
+
     for (i = 0 ; i < 7 ; i++){
-        n = ugeplan[i] = rand() % number_of_recipes;
+        n = week_plan[i] = rand() % number_of_recipes;
         for (k = 0 ; k < 7 ; k++){
-            if (is_duplicate(i, k, ugeplan) || !(tags_match(user_tags, all_recipes[n].tags))){
+            if (is_duplicate(i, k, week_plan) || !(tags_match(user_tags, all_recipes[n].tags))){
                 i--;
                 break;
             }
         }
     }
-    return ugeplan;
+    return week_plan;
 }
 
-int is_duplicate(int i, int k, int *ugeplan){
-    if ((i != k) && (ugeplan[i] == ugeplan[k]))
+int is_duplicate(int i, int k, int *week_plan){
+    if ((i != k) && (week_plan[i] == week_plan[k]))
         return 1;
     else
         return 0;
