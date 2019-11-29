@@ -2,6 +2,10 @@
     "files.associations": {
         "stdio.h": "c",
         "stdlib.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "system_error": "c",
+        "xlocale": "c",
+        "cstdlib": "c",
+        "string.h": "c"
     }
 }
