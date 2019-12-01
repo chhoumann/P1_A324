@@ -4,13 +4,29 @@
 void check_allergy(char *question, int *allergy_value);
 void clear_input_buffer(void); 
 
-int main(void) {
+void save_user_prefs(int gluten_allergy, int lactose_intolerance, int nut_allergy) {
+    FILE *user_prefs = fopen("./userprefs.txt", "w");
+
+    fprintf(user_prefs, "gluten_allergy = %d\n", gluten_allergy);
+    fprintf(user_prefs, "lactose_intolerance = %d\n", lactose_intolerance);
+    fprintf(user_prefs, "nut_allergy = %d", nut_allergy);
+
+    free(user_prefs);
+}
+
+void get_user_prefs() {
     int gluten_allergy, lactose_intolerance, nut_allergy;
 
-    printf("Velkommen! Før vi går i gang, skal vi lige vide, om du har nogle allergier.");
-    check_allergy("Har du glutenallergi? (y/n)", &gluten_allergy);
-    check_allergy("Er du laktose intolerant? (y/n)", &lactose_intolerance);
-    check_allergy("Har du nøddeallergi? (y/n)", &nut_allergy);
+    printf("Velkommen! Foer vi gaar i gang, skal vi lige vide, om du har nogle allergier.\n");
+    check_allergy("Har du glutenallergi? (y/n) ", &gluten_allergy);
+    check_allergy("Er du laktose intolerant? (y/n) ", &lactose_intolerance);
+    check_allergy("Har du noeddeallergi? (y/n) ", &nut_allergy);
+
+    save_user_prefs(gluten_allergy, lactose_intolerance, nut_allergy);
+}
+
+int main(void) {
+    get_user_prefs();
 }
 
 void check_allergy(char *question, int *allergy_value) {
