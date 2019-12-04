@@ -13,8 +13,8 @@ typedef struct {
 void do_setup(void);
 void save_user_prefs(user_prefs user_prefs);
 void check_allergy(char *question, int *allergy_value);
-user_prefs read_user_prefs_from_file(FILE *user_prefs_file);
-int is_empty(FILE *user_prefs_file);
+user_prefs read_user_prefs_from_file(FILE *file);
+int is_file_empty(FILE *user_prefs_file);
 void clear_input_buffer(void);
 
 /* The path of the user preferences .txt file */
@@ -24,7 +24,7 @@ const char *user_prefs_file_name = "./userprefs.txt";
 int main(void) {
     FILE *user_prefs_file = fopen(user_prefs_file_name, "r");
 
-    if (user_prefs_file == NULL || user_prefs_file != NULL && is_empty(user_prefs_file))
+    if (user_prefs_file == NULL || user_prefs_file != NULL && is_file_empty(user_prefs_file))
         do_setup();
     else
          read_user_prefs_from_file(user_prefs_file);
@@ -33,9 +33,6 @@ int main(void) {
 /* Given the user preferences file already exists, we read the preferences from there */
 user_prefs read_user_prefs_from_file(FILE *user_prefs_file) {
     user_prefs user_prefs;
-    
-    /* Reset the file cursor position to the start of the file */
-    fseek(user_prefs_file, 0, SEEK_SET);
 
     fscanf(user_prefs_file, "%*s %*c %d", &user_prefs.gluten_allergy);
     fscanf(user_prefs_file, "%*s %*c %d", &user_prefs.lactose_intolerance);
@@ -83,25 +80,27 @@ void check_allergy(char *question, int *allergy_value) {
     clear_input_buffer();
 }
 
-/* Checks whether the setup file exists or not (and if it exists, checks if it's empty) */
-int is_empty(FILE *user_prefs_file) {
+/* Checks whether the setup file exists or not (and if it exists, checks if it's empty) - UTILITY METHOD */
+int is_file_empty(FILE *file) {
     /* Check if file is empty */
     int file_size;
     
-    /* SEt the file cursor position to the end of the file and read file size in bytes */
-    fseek(user_prefs_file, 0, SEEK_END);
-    file_size = ftell(user_prefs_file);
+    /* Set the file cursor position to the end of the file and read file size in bytes */
+    fseek(file, 0, SEEK_END);
+    file_size = ftell(file);
 
     if (file_size == 0) {
-        /* File exists, but is empty */
+        /* File exists, but is empty - also reset the cursor to the start of the file */
+        fseek(file, 0, SEEK_SET);
         return 1;
     }
 
-    /* File is not empty */
+    /* File is not empty - also reset the cursor to the start of the file */
+    fseek(file, 0, SEEK_SET);
     return 0;
 }
 
-/* Clear input buffer (we should move this to a utility header) */
+/* Clear input buffer - UTILITY METHOD */
 void clear_input_buffer() {
     int ch;
     while ((ch = getchar()) != '\n' && ch != EOF);
