@@ -49,6 +49,8 @@ int main(void) {
     for(i = 0; i < 7; i++)
         printf("%s %s \n", weekly_schedule[i].name, weekly_schedule[i].tags);
 
+    free(sorted_recipes);
+
     return 0;
 }
 
@@ -60,7 +62,7 @@ recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *
     recipe *sorted_recipes = malloc(sizeof(recipe) * MAX_RECIPES);
 
     if(sorted_recipes == NULL)
-        printf("Malloc fejl\n");
+        printf("Malloc error\n");
     
     for (i = 0, k = 0; i < MAX_RECIPES; i++) {
         if (check_tags_match(user_tags, all_recipes[i].tags)) {
@@ -80,6 +82,9 @@ void randomizer(recipe sorted_recipes[], int recipe_matches, recipe *weekly_sche
     int *random_number;
     random_number = malloc(sizeof(int) * recipe_matches);
 
+    if(random_number == NULL)
+        printf("Malloc error in randomizer\n");
+
     for (i = 0; i < 7; i++) {
         random = rand() % recipe_matches;
 
@@ -90,6 +95,7 @@ void randomizer(recipe sorted_recipes[], int recipe_matches, recipe *weekly_sche
         
         weekly_schedule[i] = sorted_recipes[random]; 
     }
+    free(random_number);
 }
 /* Returns 1 if given randomized index is a duplicate */
 int array_contains_int(int array[], int value, int array_size) {
