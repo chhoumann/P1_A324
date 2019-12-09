@@ -19,42 +19,30 @@ double deciliter_to_liter(double deciliter);
 double convert(char *input_string);
 double conversion_calculator(char *unit, double value);
 
-int main(void){
-
-    /* For testing */
-    char ingredients[50] = "-100 g yoghurt, naturel\n";
-
-    printf("Converted to %.2lf", convert(ingredients));
-
-    return 0;
-}
-
 double convert(char *input_string){
-    int value;
+    double value;
     char unit[2];
 
     /* Scans string for -|VALUE| |UNIT| */
-    sscanf(input_string, "-%d %s", &value, &unit);
+    sscanf(input_string, "-%lf %s", &value, &unit);
 
     /* Prints arrays */
-    printf("Unit: %s\nValue: %d\n", unit, value);
+    printf("Unit: %s\nValue: %lf\n", unit, value);
     
     return conversion_calculator(unit, value);
 }
 
 double conversion_calculator(char *unit, double value){
-    char temp;
-    sscanf(unit, "%c", &temp);
-    if (temp == 'g')
+    if (strcmp(unit, "g") || strcmp(unit, "gram"))
         return gram_to_kilogram(value);
     
-    if (temp == 'k')
+    if (strcmp(unit, "kg") || strcmp(unit, "kilogram") || strcmp(unit, "kilo"))
         return kilogram_to_gram(value);
     
-    if (temp == 'l')
+    if (strcmp(unit, "dl") || strcmp(unit, "deciliter") || strcmp(unit, "dL"))
         return deciliter_to_liter(value);
     
-    if (temp == 'l')
+    if (strcmp(unit, "l") || strcmp(unit, "L") || strcmp(unit, "liter") || strcmp(unit, "litre"))
         return liter_to_deciliter(value);
     
     return EXIT_FAILURE;
