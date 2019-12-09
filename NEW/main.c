@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "./utility/utility.h"
 
 #define MAX_NAME_LENGTH 50
 #define MAX_INGREDIENTS_CHARS 1024
@@ -22,9 +23,12 @@ typedef struct {
 recipe *get_database();
 char *get_file_directory(const char *file_name, const char *file_extension);
 
-int main(void) {    
+int main(void) {
     /* Initialize the database */
     recipe *recipe_database = get_database();
+
+    FILE *test = fopen("./recipes/tom.txt", "r");
+    printf("Test: %d\n", is_file_empty(test));
 
     /* Example. Prints the name of the first recipe in the databaes. */
     printf("Name of the first recipe in the database is: %s.\n", recipe_database[0].name);
