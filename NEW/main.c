@@ -2,23 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "./utility/utility.h"
+#include "setup.h"
 
 #define MAX_NAME_LENGTH 50
-#define MAX_INGREDIENTS_CHARS 1024
+#define MAX_INGREDIENTS_CHARS 256
 #define MAX_PROCEDURE_CHARS 1024
 #define MAX_TAGS 10
 
-const char *files[] = { "test", "test2" };
+const char *files[] = { "test" };
 const char *dir = "./recipes/";
-
-/* Recipe struct which contains all the info */
-typedef struct {
-    char *name;
-    char *procedure;
-    char *ingredients;
-    char *tags;
-    int time;
-} recipe;
 
 recipe *get_database();
 char *get_file_directory(const char *file_name, const char *file_extension);
@@ -27,46 +19,101 @@ int main(void) {
     /* Initialize the database */
     recipe *recipe_database = get_database();
 
-    FILE *test = fopen("./recipes/tom.txt", "r");
-    printf("Test: %d\n", is_file_empty(test));
-
     /* Example. Prints the name of the first recipe in the databaes. */
-    printf("Name of the first recipe in the database is: %s.\n", recipe_database[0].name);
+    //printf("Name of the first recipe in the database is: %s.\n", recipe_database[0].name);
 
     /* When we're done with the database, we need to free the memory */
+    printf("Making random weekplan\n");
+    make_random_weekplan(recipe_database, "!", 20);
+    printf("Done\n");
+
     free(recipe_database);
     return EXIT_SUCCESS;
 }
 
-recipe get_recipe_data(FILE *fp) {
-    recipe recipe;
-    /*printf("------------------------------\n"); */
+int count_ingrdients_from_file(FILE *fp) {
+    int ch, number_of_lines = 0;
+    do {
+        ch = fgetc(fp);
+        if (ch == '\n'|| ch == ';')
+            number_of_lines++;
+    } while (ch != ';');
 
+    return number_of_lines;
+}
+
+ingredient *get_ingredients(FILE *fp, recipe recipe) {
+    char line[MAX_INGREDIENTS_CHARS];
+    int sentinel = 0,
+        i = 0, 
+        ingredient_start_position = ftell(fp),
+        ingredients_in_file = count_ingrdients_from_file(fp);
+    
+    ingredient *ingredients = calloc(sizeof(ingredient), ingredients_in_file);
+
+    /* Reset cursor back to the beginning of the ingredient list */
+    fseek(fp, ingredient_start_position, 0);
+
+    while(fgets(line, sizeof(line), fp) && !sentinel) {
+        ingredient ingredient;
+        char name_buffer[MAX_NAME_LENGTH];
+        char unit_buffer[MAX_NAME_LENGTH];
+        int end_of_string;
+
+        sscanf(line, "%*c %f %s %[^\n]s", &ingredient.amount, unit_buffer, name_buffer);
+
+        end_of_string = strlen(name_buffer) - 1;
+
+        if(name_buffer[end_of_string] == ';') {
+            name_buffer[end_of_string] = '\0';
+            sentinel = 1;
+        }
+
+        ingredient.name = calloc(sizeof(char), strlen(name_buffer));
+        ingredient.unit = calloc(sizeof(char), strlen(unit_buffer));
+
+        strcpy(ingredient.name, name_buffer);
+        strcpy(ingredient.unit, unit_buffer);
+
+        printf("%f %s %s\n", ingredient.amount, ingredient.unit, ingredient.name);
+
+        ingredients[i] = ingredient;
+        i++;
+    }
+    return ingredients;
+}
+
+recipe get_recipe_data(FILE *fp) {
     /* Temporary static array declarations */
     char name_buffer[MAX_NAME_LENGTH];
-    char ingredients_buffer[MAX_INGREDIENTS_CHARS];
     char procedure_buffer[MAX_PROCEDURE_CHARS];
     char tags_buffer[MAX_TAGS];
 
+    recipe recipe;
+
+    fscanf(fp, "%[^;];\n", name_buffer);
+    printf("Recipe name: %s\n", name_buffer);
+
+    recipe.ingredients = get_ingredients(fp, recipe);
+    /*printf("------------------------------\n"); */
+
     /* Scan through the file until the symbol ; is encountered for each of the four strings */ 
     /* Also note how recipe.time is written to directly, because it is easy to assign to */
-    fscanf(fp, "%[^;]; %[^;]; %[^;]; %[^;]; %d", name_buffer, ingredients_buffer, procedure_buffer, tags_buffer, &recipe.time);
+    fscanf(fp, "%[^;]; %[^;]; %d", procedure_buffer, tags_buffer, &recipe.time);
 
     /* Allocate memory for the recipe struct */
-    recipe.name        = calloc(strlen(name_buffer),        sizeof(char));
-    recipe.ingredients = calloc(strlen(ingredients_buffer), sizeof(char));
-    recipe.procedure   = calloc(strlen(procedure_buffer),   sizeof(char));
-    recipe.tags        = calloc(strlen(tags_buffer),        sizeof(char));
+    recipe.name             = calloc(strlen(name_buffer),        sizeof(char));
+    recipe.procedure        = calloc(strlen(procedure_buffer),   sizeof(char));
+    recipe.tags             = calloc(strlen(tags_buffer),        sizeof(char));
 
     /* Copy the items into the struct */
-    strcpy(recipe.name,        name_buffer);
-    strcpy(recipe.ingredients, ingredients_buffer);
-    strcpy(recipe.procedure,   procedure_buffer);
-    strcpy(recipe.tags,        tags_buffer);
+    strcpy(recipe.name,      name_buffer);
+    strcpy(recipe.procedure, procedure_buffer);
+    strcpy(recipe.tags,      tags_buffer);
 
-    /* Print the result
-    printf("Title:\n- %s\n\nIngredients:\n%s\n\nProcedure:\n%s\n\nTags: %s\n\nTime: %d minutes.\n", 
-    recipe.name, recipe.ingredients, recipe.procedure, recipe.tags, recipe.time); */
+    /* Print the result */
+    printf("Title:\n- %s\n\nProcedure:\n%s\n\nTags: %s\n\nTime: %d minutes.\n", 
+    recipe.name, recipe.procedure, recipe.tags, recipe.time); 
     return recipe;
 }
 

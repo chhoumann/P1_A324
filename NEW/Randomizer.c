@@ -2,69 +2,42 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include "./utility/utility.h"
 
-#define MAX_RECIPES 9
-#define DAYS_IN_WEEK 7
-
-struct recipe {
-    char name[100];
-    char procedure[100];
-    char ingredients[100];
-    char tags[30];
-    int time;
-};
-typedef struct recipe recipe;
-
-recipe *discard_recipes_by_tags(recipe all_recipes[], int *recipe_matches, char* user_tags); 
+recipe *make_random_weekplan(recipe *all_recipes, char *user_tags, int number_of_recipes);
+recipe *discard_recipes_by_tags(recipe all_recipes[], int *recipe_matches, char* user_tags, int number_of_recipes); 
 void randomizer(recipe sorted_recipes[], int recipe_matches, recipe weekly_schedule[]);
-
-recipe make_recipe(char *name, char *ingredients, char *procedure, char *tags, int time);
 int check_tags_match (char *user_tags, char *recipe_tags);
 int array_contains_int(int array[], int value, int array_size);
 
-
-int main(void) {
-    recipe all_recipes[MAX_RECIPES];
-    recipe weekly_schedule[DAYS_IN_WEEK]; 
-    recipe *sorted_recipes;
-    int recipe_matches = 0;
-    int i;
-    /* -----------------------------------------------------------Test data------------------------------------------ */
-    all_recipes[0] = make_recipe("kebabrulle", "lav den", "kebab", "&!", 20);
-    all_recipes[1] = make_recipe("kebabsovs", "just do it", "sovs", "#!<", 21);
-    all_recipes[2] = make_recipe("koedsovs", "bland sovs og kød", "sovs", "<-+", 15);
-    all_recipes[3] = make_recipe("ulle", "bland og bland", "vandmand", "!#<-+", 44); /* € er ikke en del af ASCII så fucker op så det nye symbol er # */
-    all_recipes[4] = make_recipe("Boller", "lav boller", "yes", "!<", 20);
-    all_recipes[5] = make_recipe("Pizza", "lav den plz", "tomater", "-+!<", 20);
-    all_recipes[6] = make_recipe("bagekartofler", "smid det vaek", "kartoffel", "&!", 20);
-    all_recipes[7] = make_recipe("kebabbolle", "make it good", "kebarulleboi", "!*&", 10);
-    all_recipes[8] = make_recipe("vand", "drik", "kun vand", "!*<", 25);
-    /* ----------------------------------------------------------------------------------------------------------------*/
+/* Calls the methods that sorts recipes by tags and then randomizes these */
+recipe *make_random_weekplan(recipe *all_recipes, char *user_tags, int number_of_recipes) {
+    printf("AAAAAAAAAAAA");
+    int recipe_matches = 0, i;
+    recipe *weekly_schedule = calloc(sizeof(recipe), DAYS_IN_WEEK); 
+    recipe *sorted_recipes = discard_recipes_by_tags(all_recipes, &recipe_matches, user_tags, number_of_recipes);
 
     srand(time(NULL));
-
-    sorted_recipes = discard_recipes_by_tags(all_recipes, &recipe_matches, "!");
     randomizer(sorted_recipes, recipe_matches, weekly_schedule);
-    
+    free(sorted_recipes);
+
     for(i = 0; i < 7; i++)
         printf("%s %s \n", weekly_schedule[i].name, weekly_schedule[i].tags);
 
-    free(sorted_recipes);
-
-    return 0;
+    return weekly_schedule;
 }
 
-    /* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array.  */
-    /* Counts the number of recipe matches via a pointer to recipes_matches */
-recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *user_tags) {
+/* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array.  */
+/* Counts the number of recipe matches via a pointer to recipes_matches */
+recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *user_tags, int number_of_recipes) {
     int i, k;
   
-    recipe *sorted_recipes = malloc(sizeof(recipe) * MAX_RECIPES);
+    recipe *sorted_recipes = malloc(sizeof(recipe) * number_of_recipes);
 
     if(sorted_recipes == NULL)
         printf("Malloc error\n");
     
-    for (i = 0, k = 0; i < MAX_RECIPES; i++) {
+    for (i = 0, k = 0; i < number_of_recipes; i++) {
         if (check_tags_match(user_tags, all_recipes[i].tags)) {
             sorted_recipes[k] = all_recipes[i];
             k++;
@@ -76,7 +49,6 @@ recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *
 }
 
 /* Randomizes the indices in sorted_recipes and allocates 7 recipes into weekly_schedule. Duplicates are accounted for in array_contain_int */
-/* Den vi kalder */
 void randomizer(recipe sorted_recipes[], int recipe_matches, recipe *weekly_schedule) {
     int i, random;
     int *random_number;
@@ -97,6 +69,7 @@ void randomizer(recipe sorted_recipes[], int recipe_matches, recipe *weekly_sche
     }
     free(random_number);
 }
+
 /* Returns 1 if given randomized index is a duplicate */
 int array_contains_int(int array[], int value, int array_size) {
     int i;
@@ -109,7 +82,6 @@ int array_contains_int(int array[], int value, int array_size) {
 }
 
 /* Returns 1 if recipe tags match user tags */
-
 int check_tags_match(char *user_tags, char *recipe_tags) {
     int i, tag_matches = 0;
     int num_user_tags = strlen(user_tags);
@@ -122,17 +94,4 @@ int check_tags_match(char *user_tags, char *recipe_tags) {
     }
 
     return (tag_matches == num_user_tags);
-}
-
-/* To make test data */
-recipe make_recipe(char *name, char *procedure, char *ingredients, char *tag, int time) {
-    recipe result;
-    
-    strcpy(result.name, name);
-    strcpy(result.ingredients, ingredients);
-    strcpy(result.procedure, procedure);
-    strcpy(result.tags, tag);
-    result.time = time;
-    
-    return result;
 }

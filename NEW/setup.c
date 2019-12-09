@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "./utility/utility.h"
 
 #define MAX_LINE_LENGTH 32
 
@@ -10,18 +11,17 @@ typedef struct {
 } user_prefs;
  
 /* Prototype methods */
+void check_setup(void);
 void do_setup(void);
 void save_user_prefs(user_prefs user_prefs);
 void check_allergy(char *question, int *allergy_value);
 user_prefs read_user_prefs_from_file(FILE *file);
-int is_file_empty(FILE *user_prefs_file);
-void clear_input_buffer(void);
 
 /* The path of the user preferences .txt file */
 const char *user_prefs_file_name = "./userprefs.txt";
 
 /* Runs the initial setup if the setup file is empty or does not exist */
-int main(void) {
+void check_setup(void) {
     FILE *user_prefs_file = fopen(user_prefs_file_name, "r");
 
     if (user_prefs_file == NULL || user_prefs_file != NULL && is_file_empty(user_prefs_file))
@@ -78,30 +78,4 @@ void check_allergy(char *question, int *allergy_value) {
     *allergy_value = input == 'y';
 
     clear_input_buffer();
-}
-
-/* Checks whether the setup file exists or not (and if it exists, checks if it's empty) - UTILITY METHOD */
-int is_file_empty(FILE *file) {
-    /* Check if file is empty */
-    int file_size;
-    
-    /* Set the file cursor position to the end of the file and read file size in bytes */
-    fseek(file, 0, SEEK_END);
-    file_size = ftell(file);
-
-    if (file_size == 0) {
-        /* File exists, but is empty - also reset the cursor to the start of the file */
-        fseek(file, 0, SEEK_SET);
-        return 1;
-    }
-
-    /* File is not empty - also reset the cursor to the start of the file */
-    fseek(file, 0, SEEK_SET);
-    return 0;
-}
-
-/* Clear input buffer - UTILITY METHOD */
-void clear_input_buffer() {
-    int ch;
-    while ((ch = getchar()) != '\n' && ch != EOF);
 }

@@ -1,19 +1,19 @@
 Oksekoed med groenne boenner;
 
--250 groenne boenner;
--300 tykstegsboeffer;
--3 fed hvidloeg;
--1 stk.lime (aften);
--1 tsk.sukker;
--lidt olie til stegning
--Lidt salt
+- 250 g groenne boenner
+- 300 g tykstegsboef
+- 3 fed hvidloeg
+- 1 stk lime
+- 1 tsk sukker
+- 1 spsk olie
+- 1 spsk salt;
 
-Fremgangsmaade;
--Skaer koedet i tynde strimler og skaer hvidloegene i skiver;
--Nip enderne af boennerne og steg boennerne i 1 minut i lidt olie i en stor, varm gryde;
--Kom koedet ved sammen med hvidloeg og lad det hele stege i yderligere 2-3 minutter ved høj varme;
--Kom sukker og lime på og smag til med salt;
--Servér straks lynstegt oksekoed toppet med kokosknas og med ris eller couscous til;
+- Skaer koedet i tynde strimler og skaer hvidloegene i skiver
+- Nip enderne af boennerne og steg boennerne i 1 minut i lidt olie i en stor, varm gryde
+- Kom koedet ved sammen med hvidloeg og lad det hele stege i yderligere 2-3 minutter ved hoej varme
+- Kom sukker og limesaft paa og smag til med salt
+- Server straks lynstegt oksekoed toppet med kokosknas og med ris eller couscous til;
 
-Tid:15 minutter;
 !<-;
+
+15;

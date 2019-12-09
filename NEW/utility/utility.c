@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-/* Checks whether the setup file exists or not (and if it exists, checks if it's empty) - UTILITY METHOD */
+/* Checks whether the setup file exists or not (and if it exists, checks if it's empty) */
 int is_file_empty(FILE *file) {
     /* Check if file is empty */
     int file_size;
@@ -18,4 +18,10 @@ int is_file_empty(FILE *file) {
     /* File is not empty - also reset the cursor to the start of the file */
     fseek(file, 0, SEEK_SET);
     return 0;
+}
+
+/* Clear input buffer */
+void clear_input_buffer() {
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF);
 }

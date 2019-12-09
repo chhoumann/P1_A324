@@ -1,1 +1,1 @@
-gcc main.c ./utility/utility.o
+gcc main.c ./utility/utility.o setup.o
