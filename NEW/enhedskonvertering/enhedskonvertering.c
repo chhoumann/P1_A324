@@ -16,22 +16,6 @@ double kilogram_to_gram(double kilogram);
 double liter_to_deciliter(double liter);
 double deciliter_to_liter(double deciliter);
 
-double convert(char *input_string);
-double conversion_calculator(char *unit, double value);
-
-double convert(char *input_string){
-    double value;
-    char unit[2];
-
-    /* Scans string for -|VALUE| |UNIT| */
-    sscanf(input_string, "-%lf %s", &value, &unit);
-
-    /* Prints arrays */
-    printf("Unit: %s\nValue: %lf\n", unit, value);
-    
-    return conversion_calculator(unit, value);
-}
-
 double conversion_calculator(char *unit, double value){
     if (strcmp(unit, "g") || strcmp(unit, "gram"))
         return gram_to_kilogram(value);
