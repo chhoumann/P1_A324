@@ -14,6 +14,7 @@ int array_contains_int(int array[], int value, int array_size);
 recipe *make_random_weekplan(recipe *all_recipes, char *user_tags, int number_of_recipes) {
     printf("AAAAAAAAAAAA");
     int recipe_matches = 0, i;
+    printf("AAAAAAAAAAAA 2: electric boogaloo");
     recipe *weekly_schedule = calloc(sizeof(recipe), DAYS_IN_WEEK); 
     recipe *sorted_recipes = discard_recipes_by_tags(all_recipes, &recipe_matches, user_tags, number_of_recipes);
 
