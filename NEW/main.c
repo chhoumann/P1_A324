@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 #include "./utility/utility.h"
 #include "setup.h"
-#include <dirent.h>
 
 #define MAX_NAME_LENGTH 50
 #define MAX_LINE_LENGTH 1024
@@ -144,10 +144,12 @@ recipe get_recipe_data(FILE *fp) {
     fscanf(fp, "%[^;]; %[^;]; %d", procedure_buffer, tags_buffer, &recipe.time);
 
     /* Allocate memory for the recipe struct */
-    recipe.name = calloc(MAX_NAME_LENGTH, sizeof(char));
-    recipe.procedure = calloc(MAX_PROCEDURE_CHARS, sizeof(char));
-    recipe.tags = calloc(MAX_TAGS, sizeof(char));
+    printf("%d\n", strlen(procedure_buffer));
 
+    recipe.name =      calloc(strlen(name_buffer) + 1,      sizeof(char));
+    recipe.procedure = calloc(strlen(procedure_buffer) + 1, sizeof(char));
+    recipe.tags =      calloc(strlen(tags_buffer) + 1,      sizeof(char));
+    
     /* Copy the items into the struct */
     strcpy(recipe.name, name_buffer);
     strcpy(recipe.procedure, procedure_buffer);
@@ -156,7 +158,7 @@ recipe get_recipe_data(FILE *fp) {
     /* Print the result */
     /*printf("Title:\n- %s\n\nProcedure:\n%s\n\nTags: %s\n\nTime: %d minutes.\n",
            recipe.name, recipe.procedure, recipe.tags, recipe.time);*/
-    printf("Title: %s\n", recipe.name);
+    printf("Title = %s, tags = %s\n", recipe.name, recipe.tags);
 
     return recipe;
 }
