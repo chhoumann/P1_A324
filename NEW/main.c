@@ -5,6 +5,7 @@
 #include "./utility/utility.h"
 #include "setup.h"
 #include "./database/database.h"
+#include "./weekplan/weekplan.h"
 
 int main(void) {
     /* Initialize the database */

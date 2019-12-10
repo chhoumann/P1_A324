@@ -113,8 +113,10 @@ recipe get_recipe_data(FILE *fp, const char *file_name) {
     recipe.name =      calloc(strlen(name_buffer) + 1,      sizeof(char));
     recipe.procedure = calloc(strlen(procedure_buffer) + 1, sizeof(char));
     recipe.tags =      calloc(strlen(tags_buffer) + 1,      sizeof(char));
-    recipe.file_name = calloc(strlen(file_name) + 1,        sizeof(char));
-    
+
+    /* Set file_name of the recipe struct without the .txt extension (so it's easier to look up) */
+    recipe.file_name = cut_file_name_extension(file_name);
+
     /* Copy the items into the struct */
     strcpy(recipe.name, name_buffer);
     strcpy(recipe.procedure, procedure_buffer);

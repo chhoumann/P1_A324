@@ -2,43 +2,28 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../utility/utility.h"
+#include "weekplan.h"
 
 #define MAX_NAME_LENGTH 50
 
-recipe *load_weekplan(FILE *weekplan_file);
-void save_weekplan(recipe *weekplan);
-int is_file_empty(FILE *file);
-recipe make_recipe(char *name);
+/* Returns true if the weekplan exists */
+int weekplan_exists(void) {
+    FILE *weekplan_file = fopen(weekplan_directory, "r");
 
-const char *dir = "./saved_weekplan.txt";
-
-int main(void) {
-    FILE *weekplan_file = fopen(dir, "r");
-
-    if(weekplan_file != NULL && !is_file_empty(weekplan_file))
-        /* Load the week plan if it's not empty */
-        load_weekplan(weekplan_file);
-    else {
-        /* Makes a weekplan and saves its names - in the future, we call it after a randomization or edit has been made */
-        recipe *weekplan = calloc(sizeof(recipe), DAYS_IN_WEEK);
-
-        weekplan[0] = make_recipe("kebabrulle");
-        weekplan[1] = make_recipe("kebabsovs");
-        weekplan[2] = make_recipe("koedsovs");
-        weekplan[3] = make_recipe("ulle");
-        weekplan[4] = make_recipe("Boller");
-        weekplan[5] = make_recipe("Pizza");
-        weekplan[6] = make_recipe("bagekartofler");
-        weekplan = rand
-        save_weekplan(weekplan);
+    if (weekplan_file != NULL && !is_file_empty(weekplan_file)) {
+        fclose(weekplan_file);
+        return 1;
     }
+    
+    return 0;
 }
 
 /* Loads a weekplan from the .txt file and returns a struct with all the names filled out */
-recipe *load_weekplan(FILE *weekplan_file) {
+recipe *load_weekplan(void) {
+    FILE *weekplan_file = fopen(weekplan_directory, "r");
+    recipe *weekplan = calloc(sizeof(recipe), DAYS_IN_WEEK);
     int i;
     char name_buffer[MAX_NAME_LENGTH];
-    recipe *weekplan = calloc(sizeof(recipe), DAYS_IN_WEEK);
 
     for (i = 0; i < DAYS_IN_WEEK; i++) {
         fscanf(weekplan_file, "%s ", name_buffer);
@@ -47,26 +32,16 @@ recipe *load_weekplan(FILE *weekplan_file) {
         strcpy(weekplan[i].file_name, name_buffer);
     }
 
-    printf("%s", weekplan[0].file_name);
+    fclose(weekplan_file);
 
     return weekplan;
 }
 
 /* Saves a weekplan to the .txt file (format is simply recipe_name1 recipe_name2 etc.) */
 void save_weekplan(recipe *weekplan) {
-    FILE *weekplan_file = fopen(dir, "w+");
+    FILE *weekplan_file = fopen(weekplan_directory, "w+");
     int i;
     
     for (i = 0; i < DAYS_IN_WEEK; i++)
         fprintf(weekplan_file, "%s ", weekplan[i].file_name);
-}
-
-/* To make test data */
-recipe make_recipe(char *name) {
-    recipe result;
-    
-    result.name = calloc(sizeof(char), strlen(name));
-    strcpy(result.name, name);
-    
-    return result;
 }
