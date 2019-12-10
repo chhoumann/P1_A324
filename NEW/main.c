@@ -15,7 +15,7 @@ int main(void) {
     get_file_names(file_names);
 
     recipe *recipe_database = get_database(file_names, file_count);
-
+    
     /* Example. Prints the index at which the recipe "Wok" is fine. */
     /*printf("Val: %d", get_recipe_by_name("Wok", recipe_database, file_count));*/
 
