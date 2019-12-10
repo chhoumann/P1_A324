@@ -1,7 +1,7 @@
 CFLAGS = -ansi -Wall
 
-Madplan.exe: randomizer.o utility/utility.o utility/utility.h main.c
-	gcc randomizer.o main.c utility/utility.o $(CFLAGS)\
+Madplan.exe: randomizer.o utility/utility.o utility/utility.h database/database.o database/database.h main.c
+	gcc main.c utility/utility.o randomizer.o database/database.o $(CFLAGS)\
 		-o Madplan.exe
 
 randomizer.o: randomizer.c utility/utility.h
@@ -9,3 +9,6 @@ randomizer.o: randomizer.c utility/utility.h
 
 utility/utility.o: utility/utility.c utility/utility.h
 	gcc -c utility/utility.c
+
+database/database.o: database/database.c database/database.h
+	gcc -c database/database.c
