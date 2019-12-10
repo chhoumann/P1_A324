@@ -6,20 +6,17 @@
 #include "setup.h"
 #include "./database/database.h"
 
-const char *dir_name = "./recipes/";
-
-
 int main(void) {
     /* Initialize the database */
-    int file_count = count_recipe_files(), i = 0;
+    int file_count = count_recipe_files();
     char *file_names[file_count];
 
     get_file_names(file_names);
 
-    for (i = 0; i < file_count; i++) 
-        printf("%s\n", file_names[i]);
-
     recipe *recipe_database = get_database(file_names, file_count);
+
+    /* Example. Prints the index at which the recipe "Wok" is fine. */
+    /*printf("Val: %d", get_recipe_by_name("Wok", recipe_database, file_count));*/
 
     /* Example. Prints the name of the first recipe in the database. */
     printf("Name of the first recipe in the database is: %s.\n", recipe_database[0].name);

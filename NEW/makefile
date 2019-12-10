@@ -8,7 +8,7 @@ randomizer.o: randomizer.c utility/utility.h
 	gcc -c randomizer.c
 
 utility/utility.o: utility/utility.c utility/utility.h
-	gcc -c utility/utility.c
+	gcc -c utility/utility.c -o ./utility/utility.o
 
 database/database.o: database/database.c database/database.h
-	gcc -c database/database.c
+	gcc -c database/database.c -o ./database/database.o

@@ -91,7 +91,7 @@ ingredient *get_ingredients(FILE *fp) {
     return ingredients;
 }
 
-recipe get_recipe_data(FILE *fp) {
+recipe get_recipe_data(FILE *fp, const char *file_name) {
     /* Temporary static array declarations */
     char name_buffer[MAX_NAME_LENGTH];
     char procedure_buffer[MAX_PROCEDURE_CHARS];
@@ -110,21 +110,20 @@ recipe get_recipe_data(FILE *fp) {
     fscanf(fp, "%[^;]; %[^;]; %d", procedure_buffer, tags_buffer, &recipe.time);
 
     /* Allocate memory for the recipe struct */
-    printf("%d\n", strlen(procedure_buffer));
-
     recipe.name =      calloc(strlen(name_buffer) + 1,      sizeof(char));
     recipe.procedure = calloc(strlen(procedure_buffer) + 1, sizeof(char));
     recipe.tags =      calloc(strlen(tags_buffer) + 1,      sizeof(char));
+    recipe.file_name = calloc(strlen(file_name) + 1,        sizeof(char));
     
     /* Copy the items into the struct */
     strcpy(recipe.name, name_buffer);
     strcpy(recipe.procedure, procedure_buffer);
     strcpy(recipe.tags, tags_buffer);
+    strcpy(recipe.file_name, file_name);
 
     /* Print the result */
     /*printf("Title:\n- %s\n\nProcedure:\n%s\n\nTags: %s\n\nTime: %d minutes.\n",
            recipe.name, recipe.procedure, recipe.tags, recipe.time);*/
-    printf("Title = %s, tags = %s\n", recipe.name, recipe.tags);
 
     return recipe;
 }
@@ -151,13 +150,13 @@ recipe *get_database(char **file_names, int file_count) {
     for (i = 0; i < file_count; i++) {
         /* Initialize file variable and get the file directory as a string */
         FILE *fp;
-        char *fileName = get_file_directory(file_names[i]);
+        char *file_name = get_file_directory(file_names[i]);
 
         /* Open the file using the directory name */
-        fp = fopen(fileName, "r");
+        fp = fopen(file_name, "r");
 
         /* Print the data from the file */
-        recipe_database[i] = get_recipe_data(fp);
+        recipe_database[i] = get_recipe_data(fp, file_names[i]);
 
         /* Close the file stream after reading */
         fclose(fp);
