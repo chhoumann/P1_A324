@@ -6,6 +6,8 @@
 
 #define MAX_NAME_LENGTH 50
 
+const char *weekplan_directory = "./saved_weekplan.txt";
+
 /* Returns true if the weekplan exists */
 int weekplan_exists(void) {
     FILE *weekplan_file = fopen(weekplan_directory, "r");
@@ -13,6 +15,7 @@ int weekplan_exists(void) {
     if (weekplan_file != NULL && !is_file_empty(weekplan_file)) {
         fclose(weekplan_file);
         return 1;
+
     }
     
     return 0;

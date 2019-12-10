@@ -13,5 +13,8 @@ utility/utility.o: utility/utility.c utility/utility.h
 database/database.o: database/database.c database/database.h
 	gcc -c database/database.c -o ./database/database.o
 
-database/database.o: weekplan/weekplan.c weekplan/weekplan.h
+weekplan/weekplan.o: weekplan/weekplan.c weekplan/weekplan.h
 	gcc -c weekplan/weekplan.c -o ./weekplan/weekplan.o
+
+clean:
+	rm -f weekplan/weekplan.o database/database.o utility/utility.o randomizer.o
