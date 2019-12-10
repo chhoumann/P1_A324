@@ -1,5 +1,7 @@
+CFLAGS = -ansi -Wall
+
 Madplan.exe: randomizer.o utility/utility.o utility/utility.h main.c
-	gcc randomizer.o main.c utility/utility.o \
+	gcc randomizer.o main.c utility/utility.o $(CFLAGS)\
 		-o Madplan.exe
 
 randomizer.o: randomizer.c utility/utility.h

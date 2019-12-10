@@ -6,6 +6,7 @@
         "system_error": "c",
         "xlocale": "c",
         "cstdlib": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "dirent.h": "c"
     }
 }
