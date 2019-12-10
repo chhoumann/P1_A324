@@ -19,4 +19,5 @@ Mexicansk burger med guacamole;
 - Server med guacamole, salsa, cheddarost og nachos;
 
  !>;
+
  45;
