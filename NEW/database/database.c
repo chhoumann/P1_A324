@@ -150,10 +150,10 @@ recipe *get_database(char **file_names, int file_count) {
     for (i = 0; i < file_count; i++) {
         /* Initialize file variable and get the file directory as a string */
         FILE *fp;
-        char *file_name = get_file_directory(file_names[i]);
+        char *directory_name = get_file_directory(file_names[i]);
 
         /* Open the file using the directory name */
-        fp = fopen(file_name, "r");
+        fp = fopen(directory_name, "r");
 
         /* Print the data from the file */
         recipe_database[i] = get_recipe_data(fp, file_names[i]);
