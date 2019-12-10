@@ -10,7 +10,6 @@
 #define MAX_INGREDIENTS_CHARS 256
 #define MAX_PROCEDURE_CHARS 2048
 #define MAX_TAGS 10
-#define AMOUNT_OF_RECIPES 22
 
 const char *dir_name = "./recipes/";
 
@@ -64,11 +63,10 @@ int main(void) {
 
     /* Example. Prints the name of the first recipe in the database. */
     printf("Name of the first recipe in the database is: %s.\n", recipe_database[0].name);
-    return EXIT_SUCCESS;
 
     /*make_random_weekplan(recipe_database, "!", 22);*/
 
-    /*free(recipe_database);*/
+    free(recipe_database);
     return EXIT_SUCCESS;
 }
 
