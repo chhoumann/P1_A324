@@ -9,7 +9,7 @@
 #define MAX_GROCERIES 25
 
 struct ingredient {
-    char item[20];
+    char name[20];
     int  amount;
     char unit[5];
 };
@@ -27,7 +27,7 @@ typedef struct recipe recipe;
 struct grocery {
     int amount;
     char unit[7];
-    char item[15];
+    char name[15];
 };
 typedef struct grocery grocery;
 
@@ -37,8 +37,8 @@ recipe make_recipe(char *name, char *ingredients[], int num_ingredients, char *p
 ingredient make_ingredient(char *ingredients);
 void get_groceries(grocery groceries[], recipe weekly_schedule[]);
 void put_ingredients_on_list(grocery groceries[], recipe weekly_schedule[], int i);
-int is_item_on_list(grocery groceries[], char *item);
-int index_item(grocery groceries[], char *item);
+int is_item_on_list(grocery groceries[], char *name);
+int index_item(grocery groceries[], char *name);
 int ingredient_exists(ingredient *weekly_schedule);
 
 
@@ -53,6 +53,9 @@ int main(void) {
         /* Forbedringer*/
             /* Kunne sikkert forbedre hvordan der allokeres plads til ingrediens arrayet i struct recipe */
                 /* Da man skal initialisere alle pladserne, ellers står der bare noget mærkeligt */
+
+        /* Aendringer */
+            /* Aendre maaden den tjekker om der er flere ingredienser tilbage i opskriften...skal vide stoerlsen paa ingredient arrayet )*/
     
 
         
@@ -85,7 +88,7 @@ int main(void) {
     for(i = 0; i < MAX_GROCERIES; i++) {
         groceries[i].amount = 0;
         strcpy(groceries[i].unit, "");
-        strcpy(groceries[i].item, "");
+        strcpy(groceries[i].name, "");
     }
 
     /* Input: weekly schedule. Output: groceries.*/
@@ -94,7 +97,7 @@ int main(void) {
     /* Printing */
     for(i = 0; i < MAX_GROCERIES; i++)
         if(groceries[i].amount != 0)
-            printf("%d %s %s\n", groceries[i].amount, groceries[i].unit, groceries[i].item);
+            printf("%d %s %s\n", groceries[i].amount, groceries[i].unit, groceries[i].name);
 
     return 0;
 }
@@ -108,7 +111,7 @@ recipe make_recipe(char *name, char *ingredients[], int num_ingredients, char *p
     for(i = 0; i < MAX_INGREDIENTS; i++) { 
         result.ingredients[i].amount = 0;
         strcpy(result.ingredients[i].unit, ""); 
-        strcpy(result.ingredients[i].item, ""); 
+        strcpy(result.ingredients[i].name, ""); 
     }
 
     strcpy(result.name, name);
@@ -125,7 +128,7 @@ recipe make_recipe(char *name, char *ingredients[], int num_ingredients, char *p
 ingredient make_ingredient(char *ingredients) {
     ingredient result;
 
-    sscanf(ingredients, "%*[-] %d %s %s", &result.amount, result.unit, result.item);
+    sscanf(ingredients, "%*[-] %d %s %s", &result.amount, result.unit, result.name);
 
     return result;
 }
@@ -143,7 +146,7 @@ void get_groceries(grocery groceries[], recipe weekly_schedule[]) {
 }
 
 /* For each place in weekly schedule, goes through each ingredient in while loop using variable k
- * If ingredient exists (more than 0 of), checks if it is already on the grocery list in is_item_on_list
+ * If ingredient exists (more than 0 of), checks if it is already on the grocery list in is_name_on_list
  * If true, adds the amount of that item to the total amount in grocery arrray, if false, adds item to the grocery list with index "index"
  */ 
 void put_ingredients_on_list(grocery groceries[], recipe weekly_schedule[], int index_weekly_schedule) {
@@ -152,12 +155,12 @@ void put_ingredients_on_list(grocery groceries[], recipe weekly_schedule[], int 
     static int index = 0;
 
     while(ingredient_exists(&weekly_schedule[i].ingredients[k])) {
-            if(is_item_on_list(groceries, weekly_schedule[i].ingredients[k].item)) {
-                groceries[index_item(groceries, weekly_schedule[i].ingredients[k].item)].amount += weekly_schedule[i].ingredients[k].amount;
+            if(is_item_on_list(groceries, weekly_schedule[i].ingredients[k].name)) {
+                groceries[index_item(groceries, weekly_schedule[i].ingredients[k].name)].amount += weekly_schedule[i].ingredients[k].amount;
                 k++;
             }
             else {
-                strcpy(groceries[index].item, weekly_schedule[i].ingredients[k].item);
+                strcpy(groceries[index].name, weekly_schedule[i].ingredients[k].name);
                 strcpy(groceries[index].unit, weekly_schedule[i].ingredients[k].unit);
                 groceries[index].amount = weekly_schedule[i].ingredients[k].amount;
                 index++, k++;
@@ -166,31 +169,31 @@ void put_ingredients_on_list(grocery groceries[], recipe weekly_schedule[], int 
 }
 
 /* Returns true if if item is already on the grocery list */
-int is_item_on_list(grocery groceries[], char *item) {
+int is_item_on_list(grocery groceries[], char *name) {
     int result, i = 0;
 
     do {
-        result = (strcmp(groceries[i].item, item) == 0);
+        result = (strcmp(groceries[i].name, name) == 0);
         i++;
-    } while (result != 1 && i < MAX_GROCERIES);
+    } while (!result && i < MAX_GROCERIES);
 
     return result;
 }
 
 /* Returns index of item */
-int index_item(grocery groceries[], char *item) {
+int index_item(grocery groceries[], char *name) {
     int index = 0, done;
 
-    done = (strcmp(item, groceries[index].item) == 0);
+    done = (strcmp(name, groceries[index].name) == 0);
 
     while(!done){
         index++;
-        done = (strcmp(item, groceries[index].item) == 0);
+        done = (strcmp(name, groceries[index].name) == 0);
     }
 
     return index;
 }
 /* Returns true if there is more than 0 of the ingredient in the recipe weekly_schedule */
 int ingredient_exists(ingredient *ingredients) {
-    return ingredients->amount != 0;
+    return ingredients->amount > 0;
 }
