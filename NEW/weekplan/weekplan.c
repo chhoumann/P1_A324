@@ -4,9 +4,7 @@
 #include "../utility/utility.h"
 #include "weekplan.h"
 
-#define MAX_NAME_LENGTH 50
-
-const char *weekplan_directory = "./saved_weekplan.txt";
+const char *weekplan_directory = "./weekplan/saved_weekplan.txt";
 
 /* Returns true if the weekplan exists */
 int weekplan_exists(void) {
@@ -15,24 +13,20 @@ int weekplan_exists(void) {
     if (weekplan_file != NULL && !is_file_empty(weekplan_file)) {
         fclose(weekplan_file);
         return 1;
-
     }
     
     return 0;
 }
 
-/* Loads a weekplan from the .txt file and returns a struct with all the names filled out */
-recipe *load_weekplan(void) {
+/* Loads a weekplan from the saved_weekplan.txt file using get_recipe_by_file_name (returns the index of the recipe in the database) */
+int *load_weekplan(void) {
     FILE *weekplan_file = fopen(weekplan_directory, "r");
-    recipe *weekplan = calloc(sizeof(recipe), DAYS_IN_WEEK);
-    int i;
-    char name_buffer[MAX_NAME_LENGTH];
+    char recipe_name[MAX_RECIPE_NAME_LENGTH];
+    int i, *weekplan = calloc(sizeof(int), DAYS_IN_WEEK);
 
     for (i = 0; i < DAYS_IN_WEEK; i++) {
-        fscanf(weekplan_file, "%s ", name_buffer);
-
-        weekplan[i].file_name = calloc(sizeof(char), strlen(name_buffer));
-        strcpy(weekplan[i].file_name, name_buffer);
+        fscanf(weekplan_file, "%[^\n]\n", recipe_name);
+        weekplan[i] = get_recipe_by_file_name(recipe_name);
     }
 
     fclose(weekplan_file);
@@ -40,11 +34,13 @@ recipe *load_weekplan(void) {
     return weekplan;
 }
 
-/* Saves a weekplan to the .txt file (format is simply recipe_name1 recipe_name2 etc.) */
-void save_weekplan(recipe *weekplan) {
+/* Saves a weekplan to the .txt file using integers and accesing the database (format is simply recipe_name1\nrecipe_name2 etc.) */
+void save_weekplan(int *weekplan) {
     FILE *weekplan_file = fopen(weekplan_directory, "w+");
     int i;
     
     for (i = 0; i < DAYS_IN_WEEK; i++)
-        fprintf(weekplan_file, "%s ", weekplan[i].file_name);
+        fprintf(weekplan_file, "%s\n", recipe_database[weekplan[i]].file_name);
+
+    fclose(weekplan_file);
 }

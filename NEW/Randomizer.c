@@ -4,18 +4,17 @@
 #include <string.h>
 #include "./utility/utility.h"
 
-recipe *make_random_weekplan(recipe *all_recipes, char *user_tags, int number_of_recipes);
-recipe *discard_recipes_by_tags(recipe all_recipes[], int *recipe_matches, char* user_tags, int number_of_recipes); 
-void randomizer(recipe sorted_recipes[], int recipe_matches, recipe weekly_schedule[]);
+recipe *discard_recipes_by_tags(recipe all_recipes[], int *recipe_matches, char* user_tags); 
+void randomizer(recipe sorted_recipes[], int recipe_matches, int *weekly_schedule);
 int check_tags_match (char *user_tags, char *recipe_tags);
 int array_contains_int(int array[], int value, int array_size);
 
 /* Calls the methods that sorts recipes by tags and then randomizes these */
-recipe *make_random_weekplan(recipe *all_recipes, char *user_tags, int number_of_recipes) {
+int *make_random_weekplan(recipe *all_recipes, char *user_tags) {
     int recipe_matches = 0, i;
+    int *weekly_schedule = calloc(sizeof(int), DAYS_IN_WEEK);
 
-    recipe *weekly_schedule = calloc(sizeof(recipe), DAYS_IN_WEEK); 
-    recipe *sorted_recipes = discard_recipes_by_tags(all_recipes, &recipe_matches, user_tags, number_of_recipes);
+    recipe *sorted_recipes = discard_recipes_by_tags(all_recipes, &recipe_matches, user_tags);
 
     srand(time(NULL));
 
@@ -27,7 +26,7 @@ recipe *make_random_weekplan(recipe *all_recipes, char *user_tags, int number_of
 
 /* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array.  */
 /* Counts the number of recipe matches via a pointer to recipes_matches */
-recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *user_tags, int number_of_recipes) {
+recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *user_tags) {
     int i, k;
   
     recipe *sorted_recipes = malloc(sizeof(recipe) * number_of_recipes);
@@ -48,18 +47,16 @@ recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *
 }
 
 /* Randomizes the indices in sorted_recipes and allocates 7 recipes into weekly_schedule. Duplicates are accounted for in array_contain_int */
-void randomizer(recipe sorted_recipes[], int recipe_matches, recipe *weekly_schedule) {
+void randomizer(recipe sorted_recipes[], int recipe_matches, int *weekly_schedule) {
     int i, random;
-    int random_number[DAYS_IN_WEEK];
 
     for (i = 0; i < 7; i++) {
         random = rand() % recipe_matches;
 
-        while (array_contains_int(random_number, random, DAYS_IN_WEEK))
+        while (array_contains_int(weekly_schedule, random, DAYS_IN_WEEK))
             random = rand() % recipe_matches;
 
-        random_number[i] = random;        
-        weekly_schedule[i] = sorted_recipes[random]; 
+        weekly_schedule[i] = random;        
     }
 }
 

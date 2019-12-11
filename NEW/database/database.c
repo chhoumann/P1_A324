@@ -93,7 +93,7 @@ ingredient *get_ingredients(FILE *fp) {
 
 recipe get_recipe_data(FILE *fp, const char *file_name) {
     /* Temporary static array declarations */
-    char name_buffer[MAX_NAME_LENGTH];
+    char name_buffer[MAX_RECIPE_NAME_LENGTH];
     char procedure_buffer[MAX_PROCEDURE_CHARS];
     char tags_buffer[MAX_TAGS];
 
@@ -142,14 +142,14 @@ char *get_file_directory(const char *file_name) {
     return directory_name;
 }
 
-recipe *get_database(char **file_names, int file_count) {
+recipe *get_database(char **file_names) {
     /* Get the amount of files to read based on the files array defined at the top */
     int i;
     
     /* Initialize the array of recipe structs (the database) */
-    recipe *recipe_database = malloc(sizeof(recipe) * file_count);
+    recipe *recipe_database = malloc(sizeof(recipe) * number_of_recipes);
 
-    for (i = 0; i < file_count; i++) {
+    for (i = 0; i < number_of_recipes; i++) {
         /* Initialize file variable and get the file directory as a string */
         FILE *fp;
         char *directory_name = get_file_directory(file_names[i]);

@@ -7,7 +7,7 @@
 int is_file_empty(FILE *file) {
     /* Check if file is empty */
     int file_size;
-    
+
     /* Set the file cursor position to the end of the file and read file size in bytes */
     fseek(file, 0, SEEK_END);
     file_size = ftell(file);
@@ -30,10 +30,10 @@ void clear_input_buffer() {
 }
 
 /* Get a recipe by file name (does not include file extension) */
-int get_recipe_by_name(char *name, recipe *recipe_database, int number_of_recipes) {
+int get_recipe_by_file_name(char *name) {
     int i;
 
-    for (i = 0; i < number_of_recipes; i++){
+    for (i = 0; i < number_of_recipes; i++) {
         /* If recipe was found, return index */
         if (strcmp(recipe_database[i].file_name, name) == 0)
             return i;
