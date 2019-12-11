@@ -24,7 +24,7 @@ int is_file_empty(FILE *file) {
 }
 
 /* Clear input buffer */
-void clear_input_buffer() {
+void clear_input_buffer(void) {
     int ch;
     while ((ch = getchar()) != '\n' && ch != EOF);
 }
@@ -40,4 +40,47 @@ int get_recipe_by_file_name(char *name) {
     }
 
     return -1;
+}
+
+int yes_no_prompt(void) {
+    char choice;
+    int more_changes;
+
+    do {
+        scanf(" %c", &choice);
+        if (choice == 'n')
+            more_changes = 0;
+        else if (choice == 'y')
+            more_changes = 1;
+        else
+            on_invalid_input();
+
+        clear_input_buffer();
+
+    } while (choice != 'n' && choice != 'y');
+
+    return more_changes;
+}
+
+void on_invalid_input(void) {
+    printf("Ugyldigt input, proev igen.\n");
+}
+
+void print_recipe(recipe recipe) {
+    int i;
+
+    system("cls");
+    printf("\n%s\nTid: %d\n", recipe.name, recipe.time);
+
+    /* Print ingredients */
+    printf("Ingredienser:\n");
+    for (i = 0; i < recipe.number_of_ingredients; i++)
+        printf("- %.2f %s %s\n", recipe.ingredients[i].amount, recipe.ingredients[i].unit, recipe.ingredients[i].name);
+
+    printf("\nFremangsmaade:\n%s", recipe.procedure);
+}
+
+void press_any_key_to_continue(void) {
+    printf("Tryk paa en vilkaarlig tast paa tastaturet for at returnere til menuen\n");
+    getchar();
 }

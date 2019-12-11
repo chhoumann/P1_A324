@@ -16,6 +16,7 @@ typedef struct {
     char *tags;
     ingredient *ingredients;
     int time;
+    int number_of_ingredients;
 } recipe;
 
 /* The database which will be easily accessible from everywhere in the program */
@@ -25,5 +26,9 @@ int number_of_recipes;
 /* Utility methods */
 int is_file_empty(FILE *file);
 void clear_input_buffer(void);
-int *make_random_weekplan(recipe *all_recipes, char *user_tags);
+int *make_random_weekplan(char *user_tags);
 int get_recipe_by_file_name(char *name);
+int yes_no_prompt(void);
+void on_invalid_input(void);
+void print_recipe(recipe recipe);
+void press_any_key_to_continue(void);

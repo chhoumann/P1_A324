@@ -1,3 +1,0 @@
-gluten_allergy = 1
-lactose_intolerance = 0
-nut_allergy = 0

@@ -51,7 +51,7 @@ int count_ingredients_from_file(FILE *fp) {
     return number_of_lines;
 }
 
-ingredient *get_ingredients(FILE *fp) {
+void get_ingredients(FILE *fp, recipe *recipe) {
     char line[MAX_INGREDIENTS_CHARS];
     int sentinel = 0, i = 0,
         ingredient_start_position = ftell(fp),
@@ -88,7 +88,8 @@ ingredient *get_ingredients(FILE *fp) {
         ingredients[i] = ingredient;
         i++;
     }
-    return ingredients;
+    recipe->number_of_ingredients = i;
+    recipe->ingredients = ingredients;
 }
 
 recipe get_recipe_data(FILE *fp, const char *file_name) {
@@ -101,7 +102,7 @@ recipe get_recipe_data(FILE *fp, const char *file_name) {
 
     fscanf(fp, "%[^;];\n", name_buffer);
 
-    recipe.ingredients = get_ingredients(fp);
+    get_ingredients(fp, &recipe);
     /*printf("------------------------------\n"); */
 
     /* Scan through the file until the symbol ; is encountered for each of the four strings */
