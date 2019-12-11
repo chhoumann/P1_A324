@@ -1,3 +1,5 @@
 int weekplan_exists(void);
 int *load_weekplan(void);
-void save_weekplan(int *weekplan);
+void save_weekplan(void);
+void print_weekplan_recipe(void);
+void change_weekplan(void);

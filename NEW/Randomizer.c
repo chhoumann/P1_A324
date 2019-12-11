@@ -4,17 +4,17 @@
 #include <string.h>
 #include "./utility/utility.h"
 
-recipe *discard_recipes_by_tags(recipe all_recipes[], int *recipe_matches, char* user_tags); 
+recipe *discard_recipes_by_tags(int *recipe_matches, char* user_tags); 
 void randomizer(recipe sorted_recipes[], int recipe_matches, int *weekly_schedule);
 int check_tags_match (char *user_tags, char *recipe_tags);
 int array_contains_int(int array[], int value, int array_size);
 
 /* Calls the methods that sorts recipes by tags and then randomizes these */
-int *make_random_weekplan(recipe *all_recipes, char *user_tags) {
+int *make_random_weekplan(char *user_tags) {
     int recipe_matches = 0, i;
     int *weekly_schedule = calloc(sizeof(int), DAYS_IN_WEEK);
 
-    recipe *sorted_recipes = discard_recipes_by_tags(all_recipes, &recipe_matches, user_tags);
+    recipe *sorted_recipes = discard_recipes_by_tags(&recipe_matches, user_tags);
 
     srand(time(NULL));
 
@@ -26,7 +26,7 @@ int *make_random_weekplan(recipe *all_recipes, char *user_tags) {
 
 /* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array.  */
 /* Counts the number of recipe matches via a pointer to recipes_matches */
-recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *user_tags) {
+recipe *discard_recipes_by_tags(int *recipe_matches, char *user_tags) {
     int i, k;
   
     recipe *sorted_recipes = malloc(sizeof(recipe) * number_of_recipes);
@@ -35,8 +35,8 @@ recipe *discard_recipes_by_tags(recipe *all_recipes, int *recipe_matches, char *
         printf("Malloc error\n");
     
     for (i = 0, k = 0; i < number_of_recipes; i++) {
-        if (check_tags_match(user_tags, all_recipes[i].tags)) {
-            sorted_recipes[k] = all_recipes[i];
+        if (check_tags_match(user_tags, recipe_database[i].tags)) {
+            sorted_recipes[k] = recipe_database[i];
             k++;
             *recipe_matches += 1;
         }
