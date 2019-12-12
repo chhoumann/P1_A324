@@ -6,6 +6,7 @@
 #include "./user_prefs/user_prefs.h"
 #include "./database/database.h"
 #include "./weekplan/weekplan.h"
+#include "./shopping_list/shopping_list.h"
 
 void exit_program(void);
 void weekplan_menu(void);
@@ -16,34 +17,15 @@ void new_weekplan_prompt(void);
 int main(void) {
     /* Initialize the database */
     number_of_recipes = count_recipe_files();
-    printf("1\n");
     char *file_names[number_of_recipes];
-    /*char *user_tags = "!";*/
 
     get_file_names(file_names);
-    printf("2\n");
     recipe_database = get_database(file_names);
-    printf("3\n");
-
-    /* Example. Prints the index at which the recipe "Wok" is fine. */
-    /*printf("Val: %d\n", get_recipe_by_file_name("Wok"));*/
-
-    /* Example. Prints the name of the first recipe in the database. */
-    /*printf("Name of the first recipe in the database is: %s.\n", recipe_database[0].name);*/
-
-    /* Example on how to save a weekplan and randomizing it */
-/*     save_weekplan(make_random_weekplan(recipe_database, user_tags));
- */
-    /* load_weekplan(); */
-
-    /*make_random_weekplan(recipe_database, "!", 22);*/
 
     if (weekplan_exists())
         load_weekplan();
 
     check_setup();
-
-    /* ------ MENU ------ */
     main_menu();
 
     /* Program should exit from the main menu function (4) so something is wrong if we get to this! */
@@ -62,19 +44,11 @@ void main_menu(void) {
         scanres = scanf("%d", &menu_selector);
 
         switch(menu_selector) {
-            case 1:
-                change_user_preferences();
-                break;
-            case 2:
-                weekplan_menu();
-                break;
-            case 3:
-                printf("Vis indkoebsliste\n");
-                break;
-            case 4:
-                exit_program();
-            default:
-                on_invalid_input();
+            case 1: change_user_preferences(); break;
+            case 2: weekplan_menu();           break;
+            case 3: print_groceries();         break;
+            case 4: exit_program();
+            default: on_invalid_input();
         }
         menu_selector = 0;
 
@@ -94,20 +68,11 @@ void weekplan_menu(void) {
         scanres = scanf("%d", &menu_selector);
         
         switch (menu_selector) {
-            case 1:
-                new_weekplan_prompt();
-                break;
-            case 2:
-                print_weekplan_recipe();
-                break;
-            case 3:
-                change_weekplan(); 
-                break;
-            case 4:
-                main_menu();
-                break;
-            default:
-                on_invalid_input();
+            case 1:  new_weekplan_prompt();   break;
+            case 2:  print_weekplan_recipe(); break;
+            case 3:  change_weekplan();       break;
+            case 4:  main_menu();             break;
+            default: on_invalid_input();
         }
         menu_selector = 0;
 

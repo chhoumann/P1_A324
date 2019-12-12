@@ -77,10 +77,10 @@ void print_recipe(recipe recipe) {
     for (i = 0; i < recipe.number_of_ingredients; i++)
         printf("- %.2f %s %s\n", recipe.ingredients[i].amount, recipe.ingredients[i].unit, recipe.ingredients[i].name);
 
-    printf("\nFremangsmaade:\n%s", recipe.procedure);
+    printf("\nFremangsmaade:\n%s\n\n", recipe.procedure);
 }
 
 void press_any_key_to_continue(void) {
-    printf("Tryk paa en vilkaarlig tast paa tastaturet for at returnere til menuen\n");
+    printf("Tryk paa en vilkaarlig tast paa tastaturet for at returnere til menuen.\n");
     getchar();
 }

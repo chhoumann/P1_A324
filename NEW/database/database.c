@@ -88,7 +88,7 @@ void get_ingredients(FILE *fp, recipe *recipe) {
         ingredients[i] = ingredient;
         i++;
     }
-    recipe->number_of_ingredients = i;
+    recipe->number_of_ingredients = i; printf("%d\n", recipe->number_of_ingredients);
     recipe->ingredients = ingredients;
 }
 
@@ -98,15 +98,11 @@ recipe get_recipe_data(FILE *fp, const char *file_name) {
     char procedure_buffer[MAX_PROCEDURE_CHARS];
     char tags_buffer[MAX_TAGS];
 
-    printf("%s\n", file_name);
-
     recipe recipe;
 
     fscanf(fp, "%[^;];\n", name_buffer);
-    printf("%s\n", name_buffer);
 
     get_ingredients(fp, &recipe);
-    printf("xd\n");
     /*printf("------------------------------\n"); */
 
     /* Scan through the file until the symbol ; is encountered for each of the four strings */
