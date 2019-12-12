@@ -16,11 +16,14 @@ void new_weekplan_prompt(void);
 int main(void) {
     /* Initialize the database */
     number_of_recipes = count_recipe_files();
+    printf("1\n");
     char *file_names[number_of_recipes];
     /*char *user_tags = "!";*/
 
     get_file_names(file_names);
+    printf("2\n");
     recipe_database = get_database(file_names);
+    printf("3\n");
 
     /* Example. Prints the index at which the recipe "Wok" is fine. */
     /*printf("Val: %d\n", get_recipe_by_file_name("Wok"));*/
@@ -121,7 +124,7 @@ void new_weekplan_prompt(void) {
         scanf(" %c", &choice);
         do {
             if (choice == 'y') {
-                int *weekplan = make_random_weekplan("!");
+                make_random_weekplan();
                 printf("Success - ny madplan.\nFoerste dag skal du have: %s\n", recipe_database[weekplan[0]].name);
                 press_any_key_to_continue();
             }

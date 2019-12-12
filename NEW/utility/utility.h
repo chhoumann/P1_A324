@@ -1,6 +1,7 @@
 #define DAYS_IN_WEEK 7
 #define TXT_EXTENSION_LENGTH 4
 #define MAX_RECIPE_NAME_LENGTH 50
+#define MAX_TAGS 8
 
 /* Recipe struct and ingredient which contains all the info for each recipe */
 typedef struct {
@@ -26,7 +27,7 @@ int number_of_recipes;
 /* Utility methods */
 int is_file_empty(FILE *file);
 void clear_input_buffer(void);
-int *make_random_weekplan(char *user_tags);
+void make_random_weekplan(void);
 int get_recipe_by_file_name(char *name);
 int yes_no_prompt(void);
 void on_invalid_input(void);

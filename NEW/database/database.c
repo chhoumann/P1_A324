@@ -98,11 +98,15 @@ recipe get_recipe_data(FILE *fp, const char *file_name) {
     char procedure_buffer[MAX_PROCEDURE_CHARS];
     char tags_buffer[MAX_TAGS];
 
+    printf("%s\n", file_name);
+
     recipe recipe;
 
     fscanf(fp, "%[^;];\n", name_buffer);
+    printf("%s\n", name_buffer);
 
     get_ingredients(fp, &recipe);
+    printf("xd\n");
     /*printf("------------------------------\n"); */
 
     /* Scan through the file until the symbol ; is encountered for each of the four strings */
@@ -149,7 +153,6 @@ recipe *get_database(char **file_names) {
     
     /* Initialize the array of recipe structs (the database) */
     recipe *recipe_database = malloc(sizeof(recipe) * number_of_recipes);
-
     for (i = 0; i < number_of_recipes; i++) {
         /* Initialize file variable and get the file directory as a string */
         FILE *fp;

@@ -4,8 +4,8 @@ Madplan.exe: randomizer.o utility/utility.o utility/utility.h database/database.
 	gcc main.c utility/utility.o randomizer.o database/database.o weekplan/weekplan.o user_prefs/user_prefs.o $(CFLAGS)\
 		-o Madplan.exe
 
-randomizer.o: randomizer.c utility/utility.h
-	gcc -c randomizer.c
+randomizer.o: randomizer.c utility/utility.h weekplan/weekplan.o weekplan/weekplan.h
+	gcc -c randomizer.c weekplan/weekplan.o
 
 utility/utility.o: utility/utility.c utility/utility.h
 	gcc -c utility/utility.c \

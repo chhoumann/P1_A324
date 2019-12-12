@@ -5,7 +5,6 @@
 #include "weekplan.h"
 
 const char *weekplan_directory = "./weekplan/saved_weekplan.txt";
-int *weekplan;
 
 void prompt_for_weekplan_change(int *day);
 void prompt_for_new_recipe(int *day, int *selected_meal);

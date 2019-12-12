@@ -14,6 +14,6 @@ Vegansk risengroed;
 - Kig til groeden og roer i den undervejs
 - Det er isaer vigtigt efter de foerste 20 minutter, naar groeden begynder at tykne, saa den ikke koger over eller braender paa;
 
-<*;
+>*;
 
 50;

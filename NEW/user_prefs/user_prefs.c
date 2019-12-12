@@ -6,17 +6,17 @@
 
 #define MAX_LINE_LENGTH 32
 #define SPACING 75
+#define NUMBER_OF_USER_PREFS 8
 
 /* Prototype methods */
 void check_setup(void);
 void initial_setup(void);
 void check_allergy(char *question, int *pref_value);
 void read_user_prefs_from_file(FILE *file);
+void generate_user_tags(void);
 
 /* The path of the user preferences .txt file */
 const char *user_prefs_file_name = "./user_prefs.txt";
-
-user_prefs saved_user_prefs;
 
 /* Runs the initial setup if the setup file is empty or does not exist */
 void check_setup(void) {
@@ -25,7 +25,9 @@ void check_setup(void) {
     if (user_prefs_file == NULL || user_prefs_file != NULL && is_file_empty(user_prefs_file))
         initial_setup();
     else
-         read_user_prefs_from_file(user_prefs_file);
+        read_user_prefs_from_file(user_prefs_file);
+    
+    generate_user_tags();
 }
 
 /* Given the user preferences file already exists, we read the preferences from there */
@@ -33,10 +35,13 @@ void read_user_prefs_from_file(FILE *user_prefs_file) {
     fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.gluten_allergy);
     fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.lactose_intolerance);
     fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.nut_allergy);
+    fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.vegan);
+    fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.quick_meals);
+    fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.slow_meals);
+    fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.high_protein);
+    fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.low_fat);
 
-    printf("Gluten allergy = %d\n", saved_user_prefs.gluten_allergy);
-    printf("Lactose intolerance = %d\n", saved_user_prefs.lactose_intolerance);
-    printf("Nut allergy = %d\n", saved_user_prefs.nut_allergy);
+    fclose(user_prefs_file);
 }
 
 /* Prompts the user for allergies and calls the save user preferences method */
@@ -45,16 +50,7 @@ void initial_setup(void) {
     check_allergy("Har du glutenallergi? (y/n) ", &saved_user_prefs.gluten_allergy);
     check_allergy("Er du laktose intolerant? (y/n) ", &saved_user_prefs.lactose_intolerance);
     check_allergy("Har du noeddeallergi? (y/n) ", &saved_user_prefs.nut_allergy);
-
-    /*
-        TAGS
-        ! = Højt proteinindhold
-        * = Vegan
-        & = Lavt fedtindhold
-        > = > 20 min
-        < = <= 20 min
-    */
-
+    
     save_user_prefs();
 }
 
@@ -64,9 +60,14 @@ void save_user_prefs(void) {
 
     fprintf(user_prefs_file, "gluten_allergy = %d\n", saved_user_prefs.gluten_allergy);
     fprintf(user_prefs_file, "lactose_intolerance = %d\n", saved_user_prefs.lactose_intolerance);
-    fprintf(user_prefs_file, "nut_allergy = %d", saved_user_prefs.nut_allergy);
+    fprintf(user_prefs_file, "nut_allergy = %d\n", saved_user_prefs.nut_allergy);    
+    fprintf(user_prefs_file, "vegan = %d\n", saved_user_prefs.vegan);
+    fprintf(user_prefs_file, "quick_meals = %d\n", saved_user_prefs.quick_meals);
+    fprintf(user_prefs_file, "slow_meals = %d\n", saved_user_prefs.slow_meals);
+    fprintf(user_prefs_file, "high_protein = %d\n", saved_user_prefs.high_protein);
+    fprintf(user_prefs_file, "low_fat = %d", saved_user_prefs.low_fat);    
 
-    free(user_prefs_file);
+    fclose(user_prefs_file);
 }
 
 /* Scans user's yes/no input in terminal and sets the allergy value to true or false */
@@ -89,11 +90,53 @@ void check_allergy(char *question, int *pref_value) {
     *pref_value = input == 'y';
 }
 
-char *generate_user_tags(void) {
-    /* Gå igennem alle user prefs og lav streng kat */
+char fetch_tag(int i) {
+    switch(i) {
+        case 1: return '#';
+        case 2: return '+';
+        case 3: return '-';
+        case 4: return '*';
+        case 5: return '<';
+        case 6: return '>';
+        case 7: return '!';
+        case 8: return '&';
+    }
+    return -1;
 }
 
-int meal_pref_status(int index, char *text, int pref_value) {
+int get_user_prefs_value(int i) {
+    switch(i) {
+        case 0: return !saved_user_prefs.gluten_allergy;
+        case 1: return !saved_user_prefs.lactose_intolerance;
+        case 2: return !saved_user_prefs.nut_allergy;
+        case 3: return saved_user_prefs.vegan;
+        case 4: return saved_user_prefs.quick_meals;
+        case 5: return saved_user_prefs.slow_meals;
+        case 6: return saved_user_prefs.high_protein;
+        case 7: return saved_user_prefs.low_fat;
+    }
+    return -1;
+}
+
+void generate_user_tags(void) {
+    /* Gå igennem alle user prefs og lav streng kat */
+    int i;
+    char *user_tags_buffer = calloc(sizeof(char), MAX_TAGS);
+
+    for (i = 0; i < NUMBER_OF_USER_PREFS; i++) {
+        if(get_user_prefs_value(i)) {
+            int len = strlen(user_tags_buffer);
+            user_tags_buffer[len] = fetch_tag(i + 1);
+        }
+    }
+
+    user_prefs_tags = calloc(sizeof(char), strlen(user_tags_buffer));
+    strcpy(user_prefs_tags, user_tags_buffer);    
+
+    free(user_tags_buffer);
+}
+
+void meal_pref_status(int index, char *text, int pref_value) {
     int i;
     int text_length = strlen(text);
     int dot_length = SPACING - text_length;
@@ -168,5 +211,7 @@ void change_user_preferences(void) {
         change_preference_value(choice);
     } while (choice != 0);
 
+    save_user_prefs();
+    generate_user_tags();
     system("cls");
 }

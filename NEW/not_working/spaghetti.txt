@@ -17,6 +17,6 @@ Spaghetti med koedsovs;
 - Lad koge i 30 min
 - Kog vand til pastaen;
 
-<=;
+<;
 
 15;
