@@ -1,8 +1,0 @@
-gluten_allergy = 1
-lactose_intolerance = 1
-nut_allergy = 1
-vegan = 0
-quick_meals = 0
-slow_meals = 0
-high_protein = 0
-low_fat = 0
