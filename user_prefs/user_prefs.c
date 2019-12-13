@@ -106,9 +106,9 @@ char fetch_tag(int i) {
 
 int get_user_prefs_value(int i) {
     switch(i) {
-        case 0: return !saved_user_prefs.gluten_allergy;
-        case 1: return !saved_user_prefs.lactose_intolerance;
-        case 2: return !saved_user_prefs.nut_allergy;
+        case 0: return saved_user_prefs.gluten_allergy;
+        case 1: return saved_user_prefs.lactose_intolerance;
+        case 2: return saved_user_prefs.nut_allergy;
         case 3: return saved_user_prefs.vegan;
         case 4: return saved_user_prefs.quick_meals;
         case 5: return saved_user_prefs.slow_meals;

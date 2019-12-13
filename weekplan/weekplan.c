@@ -42,7 +42,7 @@ int *load_weekplan(void) {
 
 /* Saves a weekplan to the .txt file using integers and accesing the database (format is simply recipe_name1\nrecipe_name2 etc.) */
 void save_weekplan(void) {
-    FILE *weekplan_file = fopen(weekplan_directory, "w+");
+    FILE *weekplan_file = fopen(weekplan_directory, "w");
     int i;
     
     for (i = 0; i < DAYS_IN_WEEK; i++)
