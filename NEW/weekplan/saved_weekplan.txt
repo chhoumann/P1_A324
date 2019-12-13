@@ -1,7 +1,7 @@
-ruskomsnusk
-Cheddar avocado burger
-Groentsagspaella
-Wok
+groentsagspaella
+veganskbagekartoffel
+cheddaravocadoburger
+chickenfriedrice
 onepotpasta
-veganskspinatboef
-butterchicken
+tartelettermedkylling
+kyllingsalat

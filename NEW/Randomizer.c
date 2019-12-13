@@ -14,13 +14,15 @@ int array_contains_int(int array[], int value, int array_size);
 /* Calls the methods that sorts recipes by tags and then randomizes these */
 void make_random_weekplan(void) {
     int recipe_matches = 0, i;
-
+    printf("1\n");
     recipe *sorted_recipes = discard_recipes_by_tags(&recipe_matches);
 
     srand(time(NULL));
-
+    printf("1.5\n");
     randomizer(sorted_recipes, recipe_matches);
+    printf("2\n");
     save_weekplan();
+    printf("3\n");
     free(sorted_recipes);
 }
 
@@ -50,14 +52,14 @@ void randomizer(recipe sorted_recipes[], int recipe_matches) {
     int i, random;
 
     
-
     for (i = 0; i < 7; i++) {
         random = rand() % recipe_matches;
-
-        while (array_contains_int(weekplan, random, DAYS_IN_WEEK))
+        while (array_contains_int(weekplan, random, DAYS_IN_WEEK)){
             random = rand() % recipe_matches;
+        }    
 
-        weekplan[i] = random;        
+        weekplan[i] = random;
+        printf("weekplan[%d] = %d", i, weekplan[i]);        
     }
     printf("Recipe matches for current settings = %d\n", recipe_matches);
 }
@@ -65,10 +67,13 @@ void randomizer(recipe sorted_recipes[], int recipe_matches) {
 /* Returns 1 if given randomized index is a duplicate */
 int array_contains_int(int array[], int value, int array_size) {
     int i;
-
-    for (i = 0; i < array_size; i++)
+    printf("ARRAY CONTAINS INT\n");
+    for (i = 0; i < array_size; i++){
+        printf("for loop ACI\n");
+        printf("array[%d] = %d", i, array[i]);
         if (array[i] == value)
             return 1;
+    }
 
     return 0;
 }

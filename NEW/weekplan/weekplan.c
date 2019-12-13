@@ -92,21 +92,26 @@ void change_weekplan(void) {
         system("cls");
 
         prompt_for_weekplan_change(&day);
-        prompt_for_new_recipe(&day, &selected_meal);
+        if (day != 0) {
+            prompt_for_new_recipe(&day, &selected_meal);
 
-        /* Subtracting one from the day and selected_meal integers because it has to equal the array-indices from 0 to 6 */
-        day--; selected_meal--;
+            /* Subtracting one from the day and selected_meal integers because it has to equal the array-indices from 0 to 6 */
+            day--; selected_meal--;
 
-        printf("%s er blevet erstattet med %s.\n", recipe_database[weekplan[day]].name, recipe_database[selected_meal]);        
-        printf("\nOensker du foretage flere aendringer? (y/n)\n");
-        
-        weekplan[day] = selected_meal;
+            printf("%s er blevet erstattet med %s.\n", recipe_database[weekplan[day]].name, recipe_database[selected_meal]);        
+            printf("\nOensker du foretage flere aendringer? (y/n)\n");
+            
+            weekplan[day] = selected_meal;
 
-        prompt_for_more_changes(&more_changes);
+            prompt_for_more_changes(&more_changes);
+        }
+        else 
+            more_changes = 0;
     }
 
     /* Save changes */
     save_weekplan();
+    system("cls");
 }
 
 /* Display the current weekplan and ask the user which recipe to replace */
@@ -115,9 +120,9 @@ void prompt_for_weekplan_change(int *day) {
     printf("Din nuvaerende ugeplan er:\n");
     print_current_weekplan();
 
-    printf("\nHvilken dag vil du gerne aendre?\n");
+    printf("\nHvilken dag vil du gerne aendre? Tryk '0' for at ikke aendre noget.\n");
     scanf(" %d", day);
-
+    
     printf("Hvilken af disse maaltider vil du erstatte?\n");
     for (i = 0; i < number_of_recipes; i++)
         printf("%2d. %s\n", i + 1, recipe_database[i].name);

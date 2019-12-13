@@ -24,6 +24,8 @@ int main(void) {
 
     if (weekplan_exists())
         load_weekplan();
+    else 
+        weekplan = calloc(sizeof(int), DAYS_IN_WEEK); /* Memory is allocated here beacause else it would only be allocated in load weekplan() */
 
     check_setup();
     main_menu();
@@ -83,7 +85,7 @@ void weekplan_menu(void) {
 
 void new_weekplan_prompt(void) {
     char choice = 0;
-    
+    printf("Hallo\n"); /* TESTING */
     if (weekplan_exists()) {
         printf("Er du sikker paa, at du vil generer en ny madplan og overskrive den nuvaerende? (y/n)\n");
         scanf(" %c", &choice);
@@ -98,6 +100,12 @@ void new_weekplan_prompt(void) {
             
             clear_input_buffer();
         } while (choice != 'y' && choice != 'n');
+    } 
+    else {
+        printf("Made new weekplan successfully\n");
+        make_random_weekplan();
+        printf("YES\n");
+        press_any_key_to_continue();
     }
 
     weekplan_menu();
