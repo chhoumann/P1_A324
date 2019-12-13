@@ -8,6 +8,7 @@
         "cstdlib": "c",
         "string.h": "c",
         "dirent.h": "c",
-        "utility.h": "c"
+        "utility.h": "c",
+        "database.h": "c"
     }
 }
