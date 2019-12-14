@@ -10,6 +10,7 @@
         "dirent.h": "c",
         "utility.h": "c",
         "database.h": "c",
-        "limits": "c"
+        "limits": "c",
+        "typeinfo": "c"
     }
 }

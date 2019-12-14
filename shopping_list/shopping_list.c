@@ -11,6 +11,7 @@
 #define MAX_GROCERY_NAME 20
 #define MAX_UNIT_NAME 8
 
+/* Prototype methods */
 int grocery_compare(const void *e1, const void *e2); 
 int is_item_on_list(ingredient groceries[], char *item);
 int index_item(ingredient groceries[], char *item);

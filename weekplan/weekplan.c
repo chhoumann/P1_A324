@@ -21,7 +21,8 @@ int weekplan_exists(void) {
     return 0;
 }
 
-/* Loads a weekplan from the saved_weekplan.txt file using get_recipe_by_file_name (returns the index of the recipe in the database) */
+/* Loads a weekplan from the saved_weekplan.txt file using get_recipe_by_file_name
+   (returns the index of the recipe in the database) */
 int *load_weekplan(void) {
     FILE *weekplan_file = fopen(weekplan_directory, "r");
     char recipe_name[MAX_RECIPE_NAME_LENGTH];

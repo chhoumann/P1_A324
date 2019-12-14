@@ -2,7 +2,9 @@
 #define TXT_EXTENSION_LENGTH 4
 #define MAX_RECIPE_NAME_LENGTH 50
 #define MAX_TAGS 8
+#define MAX_RECIPES 512
 
+/* Tags used by user preference */
 #define GLUTEN_TAG '#'
 #define LACTOSE_TAG '+'
 #define NUT_TAG '-'
@@ -33,13 +35,13 @@ typedef struct {
 recipe *recipe_database;
 int number_of_recipes;
 
-/* Utility methods */
-int is_file_empty(FILE *file);
 void clear_input_buffer(void);
 void make_random_weekplan(void);
-int get_recipe_by_file_name(char *name);
-int yes_no_prompt(void);
-int prompt_for_index_to_change(int max_index);
 void on_invalid_input(void);
 void print_recipe(recipe recipe);
 void press_any_key_to_continue(void);
+
+int is_file_empty(FILE *file);
+int get_recipe_by_file_name(char *name);
+int yes_no_prompt(void);
+int prompt_for_index_to_change(int max_index);

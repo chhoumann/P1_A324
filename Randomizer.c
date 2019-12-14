@@ -6,6 +6,7 @@
 #include "./user_prefs/user_prefs.h"
 #include "./weekplan/weekplan.h"
 
+/* Prototype methods */
 recipe *discard_recipes_by_tags(int *recipe_matches); 
 void randomizer(recipe sorted_recipes[], int recipe_matches);
 int check_tags_match(char *recipe_tags);
@@ -17,6 +18,7 @@ void make_random_weekplan(void) {
 
     recipe *sorted_recipes = discard_recipes_by_tags(&recipe_matches);
 
+    /* Sanity check in case no recipes are found with the given user preferences */
     if (recipe_matches == 0) {
         printf("Fejl - ingen opskrifter fundet med givne praeferencer!\n"
                 "Proev at aendre dine praeferencer.\n");
@@ -31,7 +33,7 @@ void make_random_weekplan(void) {
     free(sorted_recipes);
 }
 
-/* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array.  */
+/* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array. */
 /* Counts the number of recipe matches via a pointer to recipes_matches */
 recipe *discard_recipes_by_tags(int *recipe_matches) {
     int i;
@@ -39,7 +41,7 @@ recipe *discard_recipes_by_tags(int *recipe_matches) {
     recipe *sorted_recipes = calloc(sizeof(recipe), number_of_recipes);
 
     for (i = 0; i < number_of_recipes; i++) {
-        if (check_tags_match(recipe_database[i].tags)) {         
+        if (check_tags_match(recipe_database[i].tags)) {   
             sorted_recipes[*recipe_matches] = recipe_database[i];     
             (*recipe_matches)++;
         }
@@ -48,13 +50,16 @@ recipe *discard_recipes_by_tags(int *recipe_matches) {
     return sorted_recipes;
 }
 
-/* Randomizes the indices in sorted_recipes and allocates 7 recipes into weekly_schedule. Duplicates are accounted for in array_contain_int */
+/* Randomizes the indices in sorted_recipes and allocates 7 recipes into weekly_schedule.
+   Duplicates are accounted for in array_contains_int */
 void randomizer(recipe sorted_recipes[], int recipe_matches) {
-    int i, random;
+    int i;
 
     for (i = 0; i < 7; i++) {
-        random = rand() % recipe_matches;
+        int random = rand() % recipe_matches;
 
+        /* We only need to account for duplicates if there are more than 7 recipes given the user preferences
+           Otherwise, duplicates are bound to occur, about which which we notify the user in the printf below */
         if (recipe_matches >= 7)
             while (array_contains_int(weekplan, random, DAYS_IN_WEEK))
                 random = rand() % recipe_matches;
@@ -68,7 +73,6 @@ void randomizer(recipe sorted_recipes[], int recipe_matches) {
                 "der gaar igen.\n");
     else 
         printf("Success - der er blevet genereret en ny madplan.\n");
-    /*printf("Recipe matches for current settings = %d\n", recipe_matches);*/
 }
 
 /* Returns 1 if given randomized index is a duplicate */
@@ -82,6 +86,10 @@ int array_contains_int(int array[], int value, int array_size) {
     return 0;
 }
 
+/* These are tags that, if present within the given recipe, will cause the recipe to be discarded instantly
+   i.e. any recipe with gluten will be discarded if the user tags contain the gluten tag
+   The name is due to the fact that if this tag is present the recipe is not usable. So if the recipe is not
+   in accordance (i.e. contains gluten) with the tag, it will be discarded */
 int is_not_tag(char tag) {
     return (tag == GLUTEN_TAG || tag == LACTOSE_TAG || tag == NUT_TAG
     || tag == QUICK_MEALS_TAG || tag == SLOW_MEALS_TAG);
@@ -93,6 +101,7 @@ int check_tags_match(char *recipe_tags) {
     int tags_to_match = strlen(user_prefs_tags);
     int num_recipe_tags = strlen(recipe_tags);
 
+    /* Tags to match with the user preferences should not contain allergy tags or quick/slow tags */
     for (i = 0; i < strlen(user_prefs_tags); i++) {
         char tag = user_prefs_tags[i];
         if (is_not_tag(tag))
@@ -102,6 +111,7 @@ int check_tags_match(char *recipe_tags) {
     for (i = 0; i < num_recipe_tags; i++) {
         char tag = recipe_tags[i];
         if (is_not_tag(tag)) {
+            /* Recipe contains i.e. an allergy tag and is discarded instantly */
             if (strchr(user_prefs_tags, tag) != NULL)
                 return 0;
         }
@@ -109,5 +119,8 @@ int check_tags_match(char *recipe_tags) {
             tag_matches++;
     }
 
+    /* Tag matches need to match the user tags that aren't allergy tags or quick/slow meals tags 
+       i.e. if a recipe contains only the low fat tag and the user has specified only this as a preference
+       from the list of tags not present in "is_not_tags", both values will be 1 so the recipe is kept */
     return tag_matches == tags_to_match;
 }
