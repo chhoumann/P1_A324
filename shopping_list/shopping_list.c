@@ -102,6 +102,9 @@ void print_groceries(void) {
     }
 
     fclose(shop_list_file);
+
+    press_any_key_to_continue();
+    system("cls");
 }
 
 int is_spoonful(char *unit_name) {

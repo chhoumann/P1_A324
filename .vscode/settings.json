@@ -9,6 +9,7 @@
         "string.h": "c",
         "dirent.h": "c",
         "utility.h": "c",
-        "database.h": "c"
+        "database.h": "c",
+        "limits": "c"
     }
 }

@@ -14,7 +14,15 @@ int array_contains_int(int array[], int value, int array_size);
 /* Calls the methods that sorts recipes by tags and then randomizes these */
 void make_random_weekplan(void) {
     int recipe_matches = 0, i;
+
     recipe *sorted_recipes = discard_recipes_by_tags(&recipe_matches);
+
+    if (recipe_matches == 0) {
+        printf("Fejl - ingen opskrifter fundet med givne praeferencer!\n"
+                "Proev at aendre dine praeferencer.\n");
+        free(sorted_recipes);
+        return;
+    }
 
     srand(time(NULL));
     randomizer(sorted_recipes, recipe_matches);
@@ -46,11 +54,20 @@ void randomizer(recipe sorted_recipes[], int recipe_matches) {
 
     for (i = 0; i < 7; i++) {
         random = rand() % recipe_matches;
-        while (array_contains_int(weekplan, random, DAYS_IN_WEEK))
-            random = rand() % recipe_matches;
+
+        if (recipe_matches >= 7)
+            while (array_contains_int(weekplan, random, DAYS_IN_WEEK))
+                random = rand() % recipe_matches;
 
         weekplan[i] = random;      
     }
+
+    if (recipe_matches < 7)
+        printf("Databasen indeholder lige nu ikke nok opskrifter til at give dig syv tilfaeldige opskrifter"
+                " med dine nuvaerende praeferencer.\nDer vil derfor vaere nogle opskrifter i ugeplanen, "
+                "der gaar igen.\n");
+    else 
+        printf("Success - der er blevet genereret en ny madplan.\n");
     /*printf("Recipe matches for current settings = %d\n", recipe_matches);*/
 }
 
@@ -65,15 +82,32 @@ int array_contains_int(int array[], int value, int array_size) {
     return 0;
 }
 
+int is_not_tag(char tag) {
+    return (tag == GLUTEN_TAG || tag == LACTOSE_TAG || tag == NUT_TAG
+    || tag == QUICK_MEALS_TAG || tag == SLOW_MEALS_TAG);
+}
+
 /* Returns 1 if recipe tags match user tags */
 int check_tags_match(char *recipe_tags) {
     int i, tag_matches = 0;
-    int num_user_tags = strlen(user_prefs_tags);
+    int tags_to_match = strlen(user_prefs_tags);
     int num_recipe_tags = strlen(recipe_tags);
 
-    for (i = 0; i < num_recipe_tags; i++)
-        if (strchr(user_prefs_tags, recipe_tags[i]) != NULL)
+    for (i = 0; i < strlen(user_prefs_tags); i++) {
+        char tag = user_prefs_tags[i];
+        if (is_not_tag(tag))
+            tags_to_match--;
+    }
+    
+    for (i = 0; i < num_recipe_tags; i++) {
+        char tag = recipe_tags[i];
+        if (is_not_tag(tag)) {
+            if (strchr(user_prefs_tags, tag) != NULL)
+                return 0;
+        }
+        else if (strchr(user_prefs_tags, tag) != NULL)
             tag_matches++;
+    }
 
-    return (tag_matches == num_user_tags);
+    return tag_matches == tags_to_match;
 }

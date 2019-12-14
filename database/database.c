@@ -30,7 +30,7 @@ void get_file_names(char **file_names) {
 
     if(dir) {
         while ((dirent = readdir(dir)) != NULL) {
-            if(strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
+            if (strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
                 file_names[i] = malloc(strlen(dirent->d_name) + 1);
                 strcpy(file_names[i], dirent->d_name);
                 i++;
@@ -88,7 +88,7 @@ void get_ingredients(FILE *fp, recipe *recipe) {
         ingredients[i] = ingredient;
         i++;
     }
-    recipe->number_of_ingredients = i; printf("%d\n", recipe->number_of_ingredients);
+    recipe->number_of_ingredients = i;
     recipe->ingredients = ingredients;
 }
 

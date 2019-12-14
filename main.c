@@ -21,13 +21,22 @@ int main(void) {
 
     get_file_names(file_names);
     recipe_database = get_database(file_names);
+    
+    check_setup();
 
     if (weekplan_exists())
         load_weekplan();
-    else 
-        weekplan = calloc(sizeof(int), DAYS_IN_WEEK); /* Memory is allocated here beacause else it would only be allocated in load weekplan() */
+    else {
+        /* Weekplan does not exist (happens the first time the program runs), so we generate one for the user */
+        weekplan = calloc(sizeof(int), DAYS_IN_WEEK);
+        make_random_weekplan();
 
-    check_setup();
+        printf("Vi har lavet en tilfaeldig ugeplan til dig.\n"
+                "Du kan gaa ind i ugeplan-menuen og redigere ugeplanen.\n");
+                
+        press_any_key_to_continue();
+    }
+
     main_menu();
 
     /* Program should exit from the main menu function (4) so something is wrong if we get to this! */
@@ -42,13 +51,13 @@ void main_menu(void) {
     while (menu_selector != 4) {
         int scanres = 0;
 
-        printf("1. Settings \n2. Ugeplan \n3. Vis indkoebsliste \n4. Exit\n");
+        printf("1. Ugeplan-menu\n2. Vis indkoebsliste\n3. Skift praeferencer\n4. Exit\n");
         scanres = scanf("%d", &menu_selector);
 
         switch(menu_selector) {
-            case 1: change_user_preferences(); break;
-            case 2: weekplan_menu();           break;
-            case 3: print_groceries();         break;
+            case 1: weekplan_menu();           break;
+            case 2: print_groceries();         break;
+            case 3: change_user_preferences(); break;
             case 4: exit_program();
             default: on_invalid_input();
         }
@@ -66,12 +75,12 @@ void weekplan_menu(void) {
     while(menu_selector != 4) {
         int scanres = 0;
 
-        printf("1. Generer ny madplan \n2. Vis opskrifter \n3. Rediger \n4. Return to main menu \n");
+        printf("1. Vis nuvaerende ugeplan\n2. Generer ny ugeplan\n3. Rediger nuvaerende ugeplan \n4. Tilbage til hovedmenu\n");
         scanres = scanf("%d", &menu_selector);
         
         switch (menu_selector) {
-            case 1:  new_weekplan_prompt();   break;
-            case 2:  print_weekplan_recipe(); break;
+            case 1:  print_weekplan_recipe(); break;
+            case 2:  new_weekplan_prompt();   break;
             case 3:  change_weekplan();       break;
             case 4:  main_menu();             break;
             default: on_invalid_input();
@@ -84,30 +93,18 @@ void weekplan_menu(void) {
 }
 
 void new_weekplan_prompt(void) {
-    char choice = 0;
-    printf("Hallo\n"); /* TESTING */
     if (weekplan_exists()) {
         printf("Er du sikker paa, at du vil generer en ny madplan og overskrive den nuvaerende? (y/n)\n");
-        scanf(" %c", &choice);
-        do {
-            if (choice == 'y') {
-                make_random_weekplan();
-                printf("Success - ny madplan.\nFoerste dag skal du have: %s\n", recipe_database[weekplan[0]].name);
-                press_any_key_to_continue();
-            }
-            else if (choice != 'n' && choice != 'y')
-                on_invalid_input();
-            
-            clear_input_buffer();
-        } while (choice != 'y' && choice != 'n');
+        
+        if (yes_no_prompt())
+            make_random_weekplan();
     } 
     else {
-        printf("Made new weekplan successfully\n");
         make_random_weekplan();
-        printf("YES\n");
-        press_any_key_to_continue();
+        printf("Made new weekplan successfully\n");
     }
 
+    press_any_key_to_continue();
     weekplan_menu();
 }
 

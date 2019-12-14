@@ -43,23 +43,39 @@ int get_recipe_by_file_name(char *name) {
 }
 
 int yes_no_prompt(void) {
-    char choice;
-    int more_changes;
+    char input;
+    int choice;
 
     do {
-        scanf(" %c", &choice);
-        if (choice == 'n')
-            more_changes = 0;
-        else if (choice == 'y')
-            more_changes = 1;
-        else
+        scanf(" %c", &input);
+        if (input == 'n')
+            choice = 0;
+        else if (input == 'y')
+            choice = 1;
+        else {
             on_invalid_input();
+            clear_input_buffer();
+        }
+    } while (input != 'n' && input != 'y');
 
+    return choice;
+}
+
+int prompt_for_index_to_change(int max_index) {
+    int choice = -1;
+
+    do {
+        int scanres = scanf(" %d", &choice);
+
+        if (scanres == 0 || choice < 0 || choice > max_index) {
+            choice = -1;
+            on_invalid_input();
+        }
         clear_input_buffer();
+        
+    } while(choice == -1);   
 
-    } while (choice != 'n' && choice != 'y');
-
-    return more_changes;
+    return choice;
 }
 
 void on_invalid_input(void) {
@@ -81,6 +97,7 @@ void print_recipe(recipe recipe) {
 }
 
 void press_any_key_to_continue(void) {
-    printf("Tryk paa en vilkaarlig tast paa tastaturet for at returnere til menuen.\n");
+    printf("Tryk paa en vilkaarlig tast paa tastaturet for at gaa tilbage til menuen.\n");
+    clear_input_buffer();
     getchar();
 }

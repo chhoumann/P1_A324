@@ -8,7 +8,6 @@ const char *weekplan_directory = "./weekplan/saved_weekplan.txt";
 
 void prompt_for_weekplan_change(int *day);
 void prompt_for_new_recipe(int *day, int *selected_meal);
-void prompt_for_more_changes(int *more_changes);
 
 /* Returns true if the weekplan exists */
 int weekplan_exists(void) {
@@ -61,27 +60,21 @@ void print_current_weekplan(void) {
 
 /* Prints all recipes inside the weekplan and prompts the user to select one to change it */
 void print_weekplan_recipe(void) {
-    int i, choice = -1;
+    int choice = -1;
     system("cls");
     
     print_current_weekplan();
-
     printf("Vaelg en opskrift (1-7) for at vise detaljer om den. Skriv '0' for at gaa tilbage.\n");
 
-    do {
-        scanf(" %d", &choice);
+    choice = prompt_for_index_to_change(DAYS_IN_WEEK);
 
-        if (choice >= 1 && choice <= 7)
-            print_recipe(recipe_database[weekplan[choice - 1]]);
-        else if (choice == 0)
-            return;
-        else
-            on_invalid_input();
+    if (choice == 0)
+        return;
+    else if (choice != -1)
+        print_recipe(recipe_database[weekplan[choice - 1]]);
 
-        clear_input_buffer();
-    } while (choice == -1);
-
-    press_any_key_to_continue();
+    press_any_key_to_continue(); 
+    system("cls");
 }
 
 /* Change the currently saved weekplan */
@@ -103,7 +96,8 @@ void change_weekplan(void) {
             
             weekplan[day] = selected_meal;
 
-            prompt_for_more_changes(&more_changes);
+            /*prompt_for_more_changes(&more_changes);*/
+            more_changes = yes_no_prompt();
         }
         else 
             more_changes = 0;
@@ -141,22 +135,6 @@ void prompt_for_new_recipe(int *day, int *selected_meal) {
         }
     
     } while (selected_meal == 0);
-}
 
-/* Ask the user if they want to change any other recipes in the weekplan */
-void prompt_for_more_changes(int *more_changes) {
-    char choice;
-
-    do {
-        scanf(" %c", &choice);
-        if (choice == 'n')
-            *more_changes = 0;
-        else if (choice == 'y')
-            *more_changes = 1;
-        else
-            on_invalid_input();
-
-        clear_input_buffer();
-
-    } while (choice != 'n' && choice != 'y');
+    system("cls");
 }

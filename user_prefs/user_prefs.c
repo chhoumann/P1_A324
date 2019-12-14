@@ -72,34 +72,20 @@ void save_user_prefs(void) {
 
 /* Scans user's yes/no input in terminal and sets the allergy value to true or false */
 void check_allergy(char *question, int *pref_value) {
-    char input = 0;
-
-    do {
-        printf("%s", question);    
-        scanf("%c", &input);
-
-        if (input != 'y' && input != 'n') {
-            on_invalid_input();
-            input = 0;
-        }
-
-        clear_input_buffer();
-
-    } while (input == 0);
-
-    *pref_value = input == 'y';
+    printf("%s", question);   
+    *pref_value = yes_no_prompt();
 }
 
 char fetch_tag(int i) {
     switch(i) {
-        case 1: return '#';
-        case 2: return '+';
-        case 3: return '-';
-        case 4: return '*';
-        case 5: return '<';
-        case 6: return '>';
-        case 7: return '!';
-        case 8: return '&';
+        case 1: return GLUTEN_TAG;
+        case 2: return LACTOSE_TAG;
+        case 3: return NUT_TAG;
+        case 4: return VEGAN_TAG;
+        case 5: return QUICK_MEALS_TAG;
+        case 6: return SLOW_MEALS_TAG;
+        case 7: return HIGH_PROTEIN_TAG;
+        case 8: return LOW_FAT_TAG;
     }
     return -1;
 }
@@ -185,19 +171,10 @@ void change_preference_value(int choice) {
 }
 
 void prompt_for_preference_to_change(int *choice) {
-    do {
-        int scanres = 0;
-
-        printf("Hvilken praeference vil du aendre? Tast '0' for at gaa tilbage.\n");
-        scanres = scanf(" %d", choice);
-
-        if (scanres == 0 || *choice < 0 || *choice > 8) {
-            *choice = -1;
-            on_invalid_input();
-        }
-        clear_input_buffer();
-        
-    } while(*choice == -1);   
+    int max_index = 8;
+    printf("Hvilken praeference vil du aendre? Tast '0' for at gaa tilbage.\n");
+    
+    *choice = prompt_for_index_to_change(max_index);
 }
 
 void change_user_preferences(void) {
