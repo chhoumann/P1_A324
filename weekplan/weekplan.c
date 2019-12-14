@@ -138,3 +138,19 @@ void prompt_for_new_recipe(int *day, int *selected_meal) {
 
     system("cls");
 }
+
+void new_weekplan_prompt(void) {
+    if (weekplan_exists()) {
+        printf("Er du sikker paa, at du vil generer en ny madplan og overskrive den nuvaerende? (y/n)\n");
+        
+        if (yes_no_prompt())
+            make_random_weekplan();
+    } 
+    else {
+        make_random_weekplan();
+        printf("Made new weekplan successfully\n");
+    }
+
+    press_any_key_to_continue();
+    system("cls");
+}

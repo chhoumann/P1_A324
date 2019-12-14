@@ -14,6 +14,7 @@ void main_menu(void);
 void on_invalid_input(void);
 void new_weekplan_prompt(void);
 
+/*  */
 int main(void) {
     /* Initialize the database */
     number_of_recipes = count_recipe_files();
@@ -92,21 +93,6 @@ void weekplan_menu(void) {
     }
 }
 
-void new_weekplan_prompt(void) {
-    if (weekplan_exists()) {
-        printf("Er du sikker paa, at du vil generer en ny madplan og overskrive den nuvaerende? (y/n)\n");
-        
-        if (yes_no_prompt())
-            make_random_weekplan();
-    } 
-    else {
-        make_random_weekplan();
-        printf("Made new weekplan successfully\n");
-    }
-
-    press_any_key_to_continue();
-    weekplan_menu();
-}
 
 void exit_program(void) {
     free(recipe_database);
