@@ -1,7 +1,6 @@
 #define DAYS_IN_WEEK 7
-#define TXT_EXTENSION_LENGTH 4
 #define MAX_RECIPE_NAME_LENGTH 50
-#define MAX_TAGS 8
+#define MAX_TAG_BUFFER_LENGTH 32
 #define MAX_RECIPES 512
 
 /* Tags used by user preference */
@@ -35,6 +34,7 @@ typedef struct {
 recipe *recipe_database;
 int number_of_recipes;
 
+/* Global prototypes */
 void clear_input_buffer(void);
 void make_random_weekplan(void);
 void on_invalid_input(void);

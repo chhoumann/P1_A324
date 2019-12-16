@@ -1,11 +1,11 @@
 CFLAGS = -ansi -Wall 
 
-Madplan.exe: randomizer.o utility/utility.o utility/utility.h database/database.o database/database.h weekplan/weekplan.o weekplan/weekplan.h user_prefs/user_prefs.o user_prefs/user_prefs.h shopping_list/shopping_list.o shopping_list/shopping_list.h main.c
-	gcc main.c utility/utility.o randomizer.o database/database.o weekplan/weekplan.o user_prefs/user_prefs.o shopping_list/shopping_list.o $(CFLAGS)\
+Madplan.exe: randomizer/randomizer.o utility/utility.o utility/utility.h database/database.o database/database.h weekplan/weekplan.o weekplan/weekplan.h user_prefs/user_prefs.o user_prefs/user_prefs.h shopping_list/shopping_list.o shopping_list/shopping_list.h main.c
+	gcc main.c utility/utility.o randomizer/randomizer.o database/database.o weekplan/weekplan.o user_prefs/user_prefs.o shopping_list/shopping_list.o $(CFLAGS)\
 		-o Madplan.exe
 
-randomizer.o: randomizer.c utility/utility.h weekplan/weekplan.o weekplan/weekplan.h
-	gcc -c randomizer.c weekplan/weekplan.o
+randomizer/randomizer.o: randomizer/randomizer.c utility/utility.h weekplan/weekplan.o weekplan/weekplan.h
+	gcc -c randomizer/randomizer.c weekplan/weekplan.o
 
 utility/utility.o: utility/utility.c utility/utility.h
 	gcc -c utility/utility.c \

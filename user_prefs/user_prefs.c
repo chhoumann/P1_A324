@@ -4,19 +4,41 @@
 #include "../utility/utility.h"
 #include "user_prefs.h"
 
-#define MAX_LINE_LENGTH 32
-#define SPACING 75
-#define NUMBER_OF_USER_PREFS 8
+#define PRINT_SPACING 75
 
 /* Prototype methods */
-void check_setup(void);
 void initial_setup(void);
-void check_allergy(char *question, int *pref_value);
 void read_user_prefs_from_file(FILE *file);
+void save_user_prefs(void);
+void check_allergy(char *question, int *pref_value);
+void print_user_pref_value(int index, char *text, int pref_value);
+void print_all_user_prefs(void);
+void prompt_for_preference_to_change(int *choice);
 void generate_user_tags(void);
+void change_preference_value(int choice);
+char fetch_tag(int i);
+int get_user_prefs_value(int i);
 
 /* The path of the user preferences .txt file */
 const char *user_prefs_file_name = "./user_prefs.txt";
+
+/* Main function that keeps prompting for user preferences changes until the user inputs 0 (sentinel) */
+void change_user_preferences(void) {
+    int choice = -1;
+
+    do {    
+        system("cls");
+
+        print_all_user_prefs();
+        prompt_for_preference_to_change(&choice);
+        change_preference_value(choice);
+    } while (choice != 0);
+
+    /* When the user chooses to exit, we save the current settings and generate a tag string */
+    save_user_prefs();
+    generate_user_tags();
+    system("cls");
+}
 
 /* Runs the initial setup if the setup file is empty or does not exist */
 void check_setup(void) {
@@ -28,6 +50,22 @@ void check_setup(void) {
         read_user_prefs_from_file(user_prefs_file);
     
     generate_user_tags();
+}
+
+/* Prompts the user for allergies and calls the save user preferences method */
+void initial_setup(void) {
+    printf("Velkommen! Foer vi gaar i gang, skal vi lige vide, om du har nogle allergier.\n");
+    check_allergy("Har du glutenallergi? (y/n) ", &saved_user_prefs.gluten_allergy);
+    check_allergy("Er du laktose intolerant? (y/n) ", &saved_user_prefs.lactose_intolerance);
+    check_allergy("Har du noeddeallergi? (y/n) ", &saved_user_prefs.nut_allergy);
+    
+    /* Set default values on initial run */
+    saved_user_prefs.vegan = 0; saved_user_prefs.quick_meals = 0; saved_user_prefs.slow_meals = 0; saved_user_prefs.low_fat = 0;
+    
+    /* Set high protein to true by default because high protein meals are better when focusing on health (see report) */
+    saved_user_prefs.high_protein = 1; 
+    
+    save_user_prefs();
 }
 
 /* Given the user preferences file already exists, we read the preferences from there */
@@ -42,16 +80,6 @@ void read_user_prefs_from_file(FILE *user_prefs_file) {
     fscanf(user_prefs_file, "%*s %*c %d", &saved_user_prefs.low_fat);
 
     fclose(user_prefs_file);
-}
-
-/* Prompts the user for allergies and calls the save user preferences method */
-void initial_setup(void) {
-    printf("Velkommen! Foer vi gaar i gang, skal vi lige vide, om du har nogle allergier.\n");
-    check_allergy("Har du glutenallergi? (y/n) ", &saved_user_prefs.gluten_allergy);
-    check_allergy("Er du laktose intolerant? (y/n) ", &saved_user_prefs.lactose_intolerance);
-    check_allergy("Har du noeddeallergi? (y/n) ", &saved_user_prefs.nut_allergy);
-    
-    save_user_prefs();
 }
 
 /* Saves user preferences to the .txt file using the input parameters */
@@ -76,56 +104,11 @@ void check_allergy(char *question, int *pref_value) {
     *pref_value = yes_no_prompt();
 }
 
-char fetch_tag(int i) {
-    switch(i) {
-        case 1: return GLUTEN_TAG;
-        case 2: return LACTOSE_TAG;
-        case 3: return NUT_TAG;
-        case 4: return VEGAN_TAG;
-        case 5: return QUICK_MEALS_TAG;
-        case 6: return SLOW_MEALS_TAG;
-        case 7: return HIGH_PROTEIN_TAG;
-        case 8: return LOW_FAT_TAG;
-    }
-    return -1;
-}
-
-int get_user_prefs_value(int i) {
-    switch(i) {
-        case 0: return saved_user_prefs.gluten_allergy;
-        case 1: return saved_user_prefs.lactose_intolerance;
-        case 2: return saved_user_prefs.nut_allergy;
-        case 3: return saved_user_prefs.vegan;
-        case 4: return saved_user_prefs.quick_meals;
-        case 5: return saved_user_prefs.slow_meals;
-        case 6: return saved_user_prefs.high_protein;
-        case 7: return saved_user_prefs.low_fat;
-    }
-    return -1;
-}
-
-void generate_user_tags(void) {
-    /* Gå igennem alle user prefs og lav streng kat */
-    int i;
-    char *user_tags_buffer = calloc(sizeof(char), MAX_TAGS);
-
-    for (i = 0; i < NUMBER_OF_USER_PREFS; i++) {
-        if(get_user_prefs_value(i)) {
-            int len = strlen(user_tags_buffer);
-            user_tags_buffer[len] = fetch_tag(i + 1);
-        }
-    }
-
-    user_prefs_tags = calloc(sizeof(char), strlen(user_tags_buffer));
-    strcpy(user_prefs_tags, user_tags_buffer);    
-
-    free(user_tags_buffer);
-}
-
-void meal_pref_status(int index, char *text, int pref_value) {
+/* Prints the current values of the user preferences spaced with dots */
+void print_user_pref_value(int index, char *text, int pref_value) {
     int i;
     int text_length = strlen(text);
-    int dot_length = SPACING - text_length;
+    int dot_length = PRINT_SPACING - text_length;
     char *dots = calloc(sizeof(char), dot_length);
 
     for (i = 0; i < dot_length - 1; i++)
@@ -136,18 +119,52 @@ void meal_pref_status(int index, char *text, int pref_value) {
     free(dots);
 }
 
-void print_current_user_prefs(void) {
-    meal_pref_status(1, "Jeg har gluten allergi", saved_user_prefs.gluten_allergy);
-    meal_pref_status(2, "Jeg har laktose intolerans", saved_user_prefs.lactose_intolerance);
-    meal_pref_status(3, "Jeg har noedeallergi", saved_user_prefs.nut_allergy);
-    meal_pref_status(4, "Jeg foretraekker kun veganske maaltider", saved_user_prefs.vegan);
-    meal_pref_status(5, "Jeg foretraekker kun maaltider med under 20 minutters tilberedelsestid", saved_user_prefs.quick_meals);
-    meal_pref_status(6, "Jeg foretraekker kun maaltider med over 20 minutters tilberedelsestid", saved_user_prefs.slow_meals);
-    meal_pref_status(7, "Jeg foretraekker kun maaltider med hoejt protein indhold", saved_user_prefs.high_protein);
-    meal_pref_status(8, "Jeg foretraekker kun maaltider med lavt fedt inhold", saved_user_prefs.low_fat);
+/* Calls a print for every user preferences  */
+void print_all_user_prefs(void) {
+    print_user_pref_value(1, "Jeg har gluten allergi", saved_user_prefs.gluten_allergy);
+    print_user_pref_value(2, "Jeg har laktose intolerans", saved_user_prefs.lactose_intolerance);
+    print_user_pref_value(3, "Jeg har noedeallergi", saved_user_prefs.nut_allergy);
+    print_user_pref_value(4, "Jeg foretraekker kun veganske maaltider", saved_user_prefs.vegan);
+    print_user_pref_value(5, "Jeg foretraekker kun maaltider med under 20 minutters tilberedelsestid", saved_user_prefs.quick_meals);
+    print_user_pref_value(6, "Jeg foretraekker kun maaltider med over 20 minutters tilberedelsestid", saved_user_prefs.slow_meals);
+    print_user_pref_value(7, "Jeg foretraekker kun maaltider med hoejt protein indhold", saved_user_prefs.high_protein);
+    print_user_pref_value(8, "Jeg foretraekker kun maaltider med lavt fedt inhold", saved_user_prefs.low_fat);
     printf("\n");
 }
 
+/* Ask the user which user they would like to change and sets the value of choice to the user's input (1-8) */
+void prompt_for_preference_to_change(int *choice) {
+    int max_index = 8;
+    printf("Hvilken praeference vil du aendre? Tast '0' for at gaa tilbage.\n");
+    
+    *choice = prompt_for_index_to_change(max_index);
+}
+
+/* Goes through every tag and generates a string containing the tags corresponding to the set user preferences
+   For example, one might have "!<" corresponding to a preference of high protein and quick meals */
+void generate_user_tags(void) {
+    int i = 0;
+    char tag;
+    char *user_tags_buffer = calloc(sizeof(char), MAX_TAG_BUFFER_LENGTH);
+
+    /* Places the ith tag at the end of the buffer while tag is greater than 0 */
+    do {
+        int pref_value = get_user_prefs_value(i);        
+        tag = fetch_tag(i);
+        
+        if (pref_value && tag > 0)
+            user_tags_buffer[strlen(user_tags_buffer)] = tag;
+        
+        i++;
+    } while(tag > 0);
+
+    user_prefs_tags = calloc(sizeof(char), strlen(user_tags_buffer));
+    strcpy(user_prefs_tags, user_tags_buffer);    
+
+    free(user_tags_buffer);
+}
+
+/* Swaps the value of the given user preference (choice) to the opposite value */
 void change_preference_value(int choice) {
     int quick_meals_before = saved_user_prefs.quick_meals;
     int slow_meals_before = saved_user_prefs.slow_meals;
@@ -170,25 +187,32 @@ void change_preference_value(int choice) {
     }
 }
 
-void prompt_for_preference_to_change(int *choice) {
-    int max_index = 8;
-    printf("Hvilken praeference vil du aendre? Tast '0' for at gaa tilbage.\n");
-    
-    *choice = prompt_for_index_to_change(max_index);
+/* Simple switch case returning the given tag based on input parameter */
+char fetch_tag(int i) {
+    switch(i) {
+        case 0: return GLUTEN_TAG;
+        case 1: return LACTOSE_TAG;
+        case 2: return NUT_TAG;
+        case 3: return VEGAN_TAG;
+        case 4: return QUICK_MEALS_TAG;
+        case 5: return SLOW_MEALS_TAG;
+        case 6: return HIGH_PROTEIN_TAG;
+        case 7: return LOW_FAT_TAG;
+    }
+    return -1;
 }
 
-void change_user_preferences(void) {
-    int choice = -1;
-
-    do {    
-        system("cls");
-
-        print_current_user_prefs();
-        prompt_for_preference_to_change(&choice);
-        change_preference_value(choice);
-    } while (choice != 0);
-
-    save_user_prefs();
-    generate_user_tags();
-    system("cls");
+/* Returns the value (true/false) of setting based on input parameter */
+int get_user_prefs_value(int i) {
+    switch(i) {
+        case 0: return saved_user_prefs.gluten_allergy;
+        case 1: return saved_user_prefs.lactose_intolerance;
+        case 2: return saved_user_prefs.nut_allergy;
+        case 3: return saved_user_prefs.vegan;
+        case 4: return saved_user_prefs.quick_meals;
+        case 5: return saved_user_prefs.slow_meals;
+        case 6: return saved_user_prefs.high_protein;
+        case 7: return saved_user_prefs.low_fat;
+    }
+    return -1;
 }

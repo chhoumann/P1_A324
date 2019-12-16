@@ -42,7 +42,7 @@ recipe get_recipe_data(FILE *fp, const char *file_name) {
     /* Temporary static array declarations */
     char name_buffer[MAX_RECIPE_NAME_LENGTH];
     char procedure_buffer[MAX_PROCEDURE_CHARS];
-    char tags_buffer[MAX_TAGS];
+    char tags_buffer[MAX_TAG_BUFFER_LENGTH];
 
     recipe recipe;
 

@@ -2,9 +2,9 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./utility/utility.h"
-#include "./user_prefs/user_prefs.h"
-#include "./weekplan/weekplan.h"
+#include "../utility/utility.h"
+#include "../user_prefs/user_prefs.h"
+#include "../weekplan/weekplan.h"
 
 /* Prototype methods */
 recipe *discard_recipes_by_tags(int *recipe_matches); 
