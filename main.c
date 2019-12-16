@@ -100,7 +100,7 @@ void weekplan_menu(void) {
             case 1:  print_weekplan_recipe(); break;
             case 2:  new_weekplan_prompt();   break;
             case 3:  change_weekplan();       break;
-            case 4:  main_menu();             break;
+            case 4:  system("cls");           return;
             default: on_invalid_input();
         }
         menu_selector = 0;
