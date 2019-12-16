@@ -100,6 +100,9 @@ void print_groceries(void) {
         }
     }
 
+    /* Inform the user that the shopping list text file has been generated as well */
+    printf("\nIndkoebslisten er gemt til filen \"shopping_list.txt\", som kan aabnes og evt. udskrives.\n\n");
+
     /* Close file and prompt for pressing any key to return to menu */
     fclose(shop_list_file);
     press_any_key_to_continue();
