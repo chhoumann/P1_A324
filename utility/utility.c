@@ -89,15 +89,15 @@ void on_invalid_input(void) {
 }
 
 /* Clears the terminal and prints all the details of a recipe */
-void print_recipe(recipe recipe) {
+void print_recipe(recipe recipe, float serving_size) {
     int i;
 
     printf("\n%s\nTid: %d\n", recipe.name, recipe.time);
 
     printf("Ingredienser:\n");
-    for (i = 0; i < recipe.number_of_ingredients; i++) {
-        printf("- %.2f %s %s\n", recipe.ingredients[i].amount, recipe.ingredients[i].unit, recipe.ingredients[i].name);
-    }
+    for (i = 0; i < recipe.number_of_ingredients; i++)
+        printf("- %.2f %s %s\n", 
+            recipe.ingredients[i].amount * serving_size, recipe.ingredients[i].unit, recipe.ingredients[i].name);
 
     printf("\nFremangsmaade:\n%s\n\n", recipe.procedure);
 }
@@ -106,4 +106,17 @@ void print_recipe(recipe recipe) {
 void press_any_key_to_continue(void) {
     printf("Tryk paa en vilkaarlig tast paa tastaturet for at gaa tilbage til menuen.\n");
     getchar();    
+}
+
+/* Ask the user how many people they cook for (to scale the amount of ingredients when printing recipes) */
+float get_serving_size(void) {
+    int max_serving_size = 10; /* Assumes that nobody cooks for more than 10 people at once */
+    int choice;
+    float default_serving_size = 4.0f;
+
+    printf("Hvor mange personer laver du mad til?\n");
+    
+    choice = prompt_for_index_to_change(max_serving_size);
+    
+    return choice / default_serving_size;
 }

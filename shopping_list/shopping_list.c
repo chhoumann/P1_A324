@@ -22,6 +22,8 @@ void print_groceries(void) {
     int number_of_ingredients_in_weekplan = 0;
     int i, k, shopping_list_size = 0;
 
+    float serving_size = get_serving_size();
+
     /* Open the shopping list file */
     FILE *shop_list_file = fopen(shop_list_dir, "w");
 
@@ -60,8 +62,11 @@ void print_groceries(void) {
     /* Create the final grocery array */
     groceries = calloc(sizeof(ingredient), shopping_list_size);
 
-    for (i = 0; i < shopping_list_size; i++)
+    /* Clone the grocery array and set serving size */
+    for (i = 0; i < shopping_list_size; i++) {
         groceries[i] = groceries_buffer[i];
+        groceries[i].amount *= serving_size;
+    }
 
     /* Sort groceries by amount and unit */
     qsort(groceries, shopping_list_size, sizeof(ingredient), grocery_compare);
@@ -97,7 +102,6 @@ void print_groceries(void) {
 
     /* Close file and prompt for pressing any key to return to menu */
     fclose(shop_list_file);
-    clear_input_buffer();
     press_any_key_to_continue();
     system("cls");
 }

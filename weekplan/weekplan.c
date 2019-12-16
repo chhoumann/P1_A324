@@ -67,6 +67,8 @@ void print_current_weekplan(void) {
 /* Prints all recipes inside the weekplan and prompts the user to select one to change it */
 void print_weekplan_recipe(void) {
     int choice = -1;
+    float serving_size;
+
     system("cls");
     
     print_current_weekplan();
@@ -75,10 +77,12 @@ void print_weekplan_recipe(void) {
     choice = prompt_for_index_to_change(DAYS_IN_WEEK);
     system("cls");
 
+    serving_size = get_serving_size();
+
     if (choice == 0)
         return;
     else if (choice != -1)
-        print_recipe(recipe_database[weekplan[choice - 1]]);
+        print_recipe(recipe_database[weekplan[choice - 1]], serving_size);
 
     press_any_key_to_continue(); 
     system("cls");
