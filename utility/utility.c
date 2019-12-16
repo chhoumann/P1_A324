@@ -102,7 +102,7 @@ void print_recipe(recipe recipe) {
     printf("\nFremangsmaade:\n%s\n\n", recipe.procedure);
 }
 
-/* Clears the input buffer and pauses until the user enters a character on the keyboard */
+/* Clears the input buffer and yields until the user enters a character on the keyboard */
 void press_any_key_to_continue(void) {
     printf("Tryk paa en vilkaarlig tast paa tastaturet for at gaa tilbage til menuen.\n");
     clear_input_buffer();
