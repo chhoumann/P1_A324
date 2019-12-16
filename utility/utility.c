@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h> 
 #include <stdlib.h>
+#include <math.h>
 #include "utility.h"
 
 /* Checks whether the setup file exists or not (and if it exists, checks if it's empty) */
@@ -95,9 +96,19 @@ void print_recipe(recipe recipe, float serving_size) {
     printf("\n%s\nTid: %d\n", recipe.name, recipe.time);
 
     printf("Ingredienser:\n");
-    for (i = 0; i < recipe.number_of_ingredients; i++)
-        printf("- %.2f %s %s\n", 
-            recipe.ingredients[i].amount * serving_size, recipe.ingredients[i].unit, recipe.ingredients[i].name);
+    for (i = 0; i < recipe.number_of_ingredients; i++) {
+        /*  Check if the floating point value is the same as the integer value,
+            in which case we don't want to print any decimals */
+        float amount = recipe.ingredients[i].amount * serving_size;
+        int floored_amount = (int)floor(amount);
+
+        if (floored_amount == amount)
+            printf("- %d %s %s\n", 
+                floored_amount, recipe.ingredients[i].unit, recipe.ingredients[i].name);
+        else
+            printf("- %.2f %s %s\n", 
+                amount, recipe.ingredients[i].unit, recipe.ingredients[i].name);
+    }
 
     printf("\nFremangsmaade:\n%s\n\n", recipe.procedure);
 }
@@ -111,12 +122,17 @@ void press_any_key_to_continue(void) {
 /* Ask the user how many people they cook for (to scale the amount of ingredients when printing recipes) */
 float get_serving_size(void) {
     int max_serving_size = 10; /* Assumes that nobody cooks for more than 10 people at once */
-    int choice;
+    int choice = 0;
     float default_serving_size = 4.0f;
 
-    printf("Hvor mange personer laver du mad til?\n");
-    
-    choice = prompt_for_index_to_change(max_serving_size);
+    do {
+        printf("Hvor mange personer laver du mad til?\n");
+        
+        choice = prompt_for_index_to_change(max_serving_size);
+        if (choice == 0) 
+            on_invalid_input();
+
+    } while (choice == 0);
     
     return choice / default_serving_size;
 }
