@@ -57,9 +57,11 @@ void save_weekplan(void) {
 /* Prints the currently saved weekplan - fetches recipe name from database using the indexes of the weekplan array */
 void print_current_weekplan(void) {
     int i;
-    
+
+    const char *weekday_names[DAYS_IN_WEEK] = { "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Loerdag", "Soendag" };
+
     for (i = 0; i < DAYS_IN_WEEK; i++)
-        printf("%d. %s.\n", i + 1, recipe_database[weekplan[i]].name); 
+        printf("%d. %7s: %s.\n", i + 1, weekday_names[i], recipe_database[weekplan[i]].name); 
 }
 
 /* Prints all recipes inside the weekplan and prompts the user to select one to change it */
@@ -71,6 +73,7 @@ void print_weekplan_recipe(void) {
     printf("Vaelg en opskrift (1-7) for at vise detaljer om den. Skriv '0' for at gaa tilbage.\n");
 
     choice = prompt_for_index_to_change(DAYS_IN_WEEK);
+    system("cls");
 
     if (choice == 0)
         return;

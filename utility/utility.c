@@ -92,12 +92,12 @@ void on_invalid_input(void) {
 void print_recipe(recipe recipe) {
     int i;
 
-    system("cls");
     printf("\n%s\nTid: %d\n", recipe.name, recipe.time);
 
     printf("Ingredienser:\n");
-    for (i = 0; i < recipe.number_of_ingredients; i++)
+    for (i = 0; i < recipe.number_of_ingredients; i++) {
         printf("- %.2f %s %s\n", recipe.ingredients[i].amount, recipe.ingredients[i].unit, recipe.ingredients[i].name);
+    }
 
     printf("\nFremangsmaade:\n%s\n\n", recipe.procedure);
 }
@@ -105,6 +105,5 @@ void print_recipe(recipe recipe) {
 /* Clears the input buffer and yields until the user enters a character on the keyboard */
 void press_any_key_to_continue(void) {
     printf("Tryk paa en vilkaarlig tast paa tastaturet for at gaa tilbage til menuen.\n");
-    clear_input_buffer();
-    getchar();
+    getchar();    
 }

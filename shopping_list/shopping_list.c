@@ -95,8 +95,9 @@ void print_groceries(void) {
         }
     }
 
+    /* Close file and prompt for pressing any key to return to menu */
     fclose(shop_list_file);
-
+    clear_input_buffer();
     press_any_key_to_continue();
     system("cls");
 }

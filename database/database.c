@@ -141,20 +141,20 @@ void get_ingredients(FILE *fp, recipe *recipe) {
         ingredient_start_position = ftell(fp), /* Assumes current cursor position is after the recipe name has been read */
         ingredients_in_file = count_ingredients_from_file(fp);
 
-    ingredient *ingredients = calloc(sizeof(ingredient), ingredients_in_file);
+    /* Allocate memory for the recipe's ingredients array since we now know the amount of ingredients */
+    recipe->ingredients = calloc(sizeof(ingredient), ingredients_in_file);
 
     /* Reset cursor back to the beginning of the ingredient list */
     fseek(fp, ingredient_start_position, SEEK_SET);
 
     /* Reads ingredient data from recipe file line by line and stores in ingredients array */
     while (fgets(line, sizeof(line), fp) && !sentinel) {
-        ingredient ingredient;
         char name_buffer[MAX_LINE_LENGTH];
         char unit_buffer[MAX_LINE_LENGTH];
         int end_of_string;
 
         /* Scan the line - format example: "- 10 g himalayan pink salt"  */
-        sscanf(line, "%*c %f %s %[^\n]s", &ingredient.amount, unit_buffer, name_buffer);
+        sscanf(line, "%*c %f %s %[^\n]s", &recipe->ingredients[i].amount, unit_buffer, name_buffer);
 
         /* Get end of string to check if it's the final ingredient (meaning it ends with ';') */
         end_of_string = strlen(name_buffer) - 1;
@@ -166,23 +166,17 @@ void get_ingredients(FILE *fp, recipe *recipe) {
         }
 
         /* Allocate memory for the name and unit and copy from the buffer */
-        ingredient.name = calloc(sizeof(char), strlen(name_buffer));
-        ingredient.unit = calloc(sizeof(char), strlen(unit_buffer));
+        recipe->ingredients[i].name = calloc(sizeof(char), strlen(name_buffer));
+        recipe->ingredients[i].unit = calloc(sizeof(char), strlen(unit_buffer));
 
-        strcpy(ingredient.name, name_buffer);
-        strcpy(ingredient.unit, unit_buffer);
+        strcpy(recipe->ingredients[i].name, name_buffer);
+        strcpy(recipe->ingredients[i].unit, unit_buffer);
 
-        /* Places loaded ingredient into ingredients array */
-        ingredients[i] = ingredient;
         i++;
     }
 
-    /* Sets number of ingredients and copies the ingredient to the recipe array's ingredient */
+    /* Set number of ingredients to the index we reached */
     recipe->number_of_ingredients = i;
-    recipe->ingredients = ingredients;
-    
-    /* Frees memory for ingredients array now that it is loaded into recipe struct */
-    free(ingredients);
 }
 
 /* Count the amount of ingredients in a recipe file assuming we've already read the name */
