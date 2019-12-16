@@ -68,7 +68,8 @@ void print_groceries(void) {
         groceries[i].amount *= serving_size;
     }
 
-    /* Sort groceries by amount and unit */
+    /* Free grocery list buffer and sort groceries by amount and unit */
+    free(groceries_buffer);
     qsort(groceries, shopping_list_size, sizeof(ingredient), grocery_compare);
     
     /* Print result and write to file */
