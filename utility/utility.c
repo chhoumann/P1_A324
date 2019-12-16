@@ -64,7 +64,7 @@ int yes_no_prompt(void) {
     return choice;
 }
 
-/* Used for menu selection. Allows for selection between 0 and max index based on a paramter */
+/* Used for menu selection. Allows for selection between 0 and max index based on a parameter */
 int prompt_for_index_to_change(int max_index) {
     int choice = -1;
 
@@ -89,7 +89,7 @@ void on_invalid_input(void) {
     printf("Ugyldigt input, proev igen.\n");
 }
 
-/* Clears the terminal and prints all the details of a recipe */
+/* Prints all the details of a recipe */
 void print_recipe(recipe recipe, float serving_size) {
     int i;
 
