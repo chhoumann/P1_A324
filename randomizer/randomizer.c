@@ -14,7 +14,7 @@ int array_contains_int(int array[], int value, int array_size);
 
 /* Calls the methods that sorts recipes by tags and then randomizes these */
 int make_random_weekplan(void) {
-    int recipe_matches = 0, i;
+    int recipe_matches = 0;
 
     int *sorted_recipes = discard_recipes_by_tags(&recipe_matches);
 
