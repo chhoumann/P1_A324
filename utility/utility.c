@@ -2,6 +2,7 @@
 #include <string.h> 
 #include <stdlib.h>
 #include <math.h>
+#include <conio.h>
 #include "utility.h"
 
 /* Checks whether the setup file exists or not (and if it exists, checks if it's empty) */
@@ -116,7 +117,7 @@ void print_recipe(recipe recipe, float serving_size) {
 /* Clears the input buffer and yields until the user enters a character on the keyboard */
 void press_any_key_to_continue(void) {
     printf("Tryk paa en vilkaarlig tast paa tastaturet for at gaa tilbage til menuen.\n");
-    getchar();    
+    getch();    
 }
 
 /* Ask the user how many people they cook for (to scale the amount of ingredients when printing recipes) */
