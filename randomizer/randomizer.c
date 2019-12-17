@@ -13,7 +13,7 @@ int check_tags_match(char *recipe_tags);
 int array_contains_int(int array[], int value, int array_size);
 
 /* Calls the methods that sorts recipes by tags and then randomizes these */
-void make_random_weekplan(void) {
+int make_random_weekplan(void) {
     int recipe_matches = 0, i;
 
     recipe *sorted_recipes = discard_recipes_by_tags(&recipe_matches);
@@ -23,7 +23,8 @@ void make_random_weekplan(void) {
         printf("Fejl - ingen opskrifter fundet med givne praeferencer!\n"
                 "Proev at aendre dine praeferencer.\n");
         free(sorted_recipes);
-        return;
+        
+        return EXIT_FAILURE;
     }
 
     srand(time(NULL));
@@ -31,6 +32,8 @@ void make_random_weekplan(void) {
     save_weekplan();
     
     free(sorted_recipes);
+    
+    return EXIT_SUCCESS;
 }
 
 /* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array. */

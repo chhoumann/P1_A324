@@ -155,8 +155,11 @@ void new_weekplan_prompt(void) {
         make_weekplan = 1;
 
     if (make_weekplan) {
-        make_random_weekplan();
-        printf("Success - der er blevet genereret en ny madplan.\n\n");
+        /* It is possible that 0 recipes match the user preferences, which we need to check */
+        int success = make_random_weekplan();
+
+        if (success == EXIT_SUCCESS)
+            printf("Success - der er blevet genereret en ny madplan.\n\n");
     }
 
     press_any_key_to_continue();
