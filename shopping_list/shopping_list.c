@@ -107,7 +107,7 @@ void print_groceries(void) {
     /* Close file and prompt for pressing any key to return to menu */
     fclose(shop_list_file);
     press_any_key_to_continue();
-    system("cls");
+    clear_screen();
 }
 
 /* Checks if the grocery is duplicate. Returns the index if it has the same name and unit. 

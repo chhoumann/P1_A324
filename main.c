@@ -25,13 +25,17 @@ void exit_program(void);
 
 /* Main function that handles setup, menus and exiting */
 int main(void) {
+    char **file_names;
+
+    /* Clear any text inside the window when the program starts */
+    clear_screen();
+    
     /* Count the number of recipes in the recipe folder and initialize the file name array
        Also gets all file names for every recipe in the database */
-    char **file_names = get_and_count_recipe_files();
+    file_names = get_and_count_recipe_files();
     
     /* Initialize the database */
     get_database(file_names);
-    
     /* Runs the initial setup if the setup file is empty or does not exist */
     check_setup();
 
@@ -44,7 +48,7 @@ int main(void) {
         make_random_weekplan();
 
         printf("Vi har lavet en tilfaeldig ugeplan til dig.\n"
-                "Du kan gaa ind i ugeplan-menuen og redigere ugeplanen.\n");
+                "Du kan gaa ind i ugeplan-menuen og redigere ugeplanen.\n\n");
                 
         press_any_key_to_continue();
     }
@@ -60,7 +64,7 @@ int main(void) {
 /* Prints main menu for user navigation - reads input from 1-4 and calls the corresponding methods */
 void main_menu(void) {
     int menu_selector = 0;
-    system("cls");
+    clear_screen();
 
     while (menu_selector != 4) {
         int scanres = 0;
@@ -87,7 +91,7 @@ void main_menu(void) {
 /* Weekplan sub menu accessed via the main menu - same input principle as with the main menu */
 void weekplan_menu(void) {
     int menu_selector = 0;
-    system("cls");
+    clear_screen();
 
     while(menu_selector != 4) {
         int scanres = 0;
@@ -100,7 +104,7 @@ void weekplan_menu(void) {
             case 1:  print_weekplan_recipe(); break;
             case 2:  new_weekplan_prompt();   break;
             case 3:  change_weekplan();       break;
-            case 4:  system("cls");           return;
+            case 4:  clear_screen();          return;
             default: on_invalid_input();
         }
         menu_selector = 0;

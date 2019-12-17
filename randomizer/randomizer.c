@@ -71,8 +71,6 @@ void randomizer(recipe sorted_recipes[], int recipe_matches) {
         printf("Databasen indeholder lige nu ikke nok opskrifter til at give dig syv tilfaeldige opskrifter"
                 " med dine nuvaerende praeferencer.\nDer vil derfor vaere nogle opskrifter i ugeplanen, "
                 "der gaar igen.\n");
-    else 
-        printf("Success - der er blevet genereret en ny madplan.\n");
 }
 
 /* Returns 1 if given randomized index is a duplicate */

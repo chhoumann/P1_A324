@@ -5,7 +5,8 @@ Madplan.exe: randomizer/randomizer.o utility/utility.o utility/utility.h databas
 		-o Madplan.exe
 
 randomizer/randomizer.o: randomizer/randomizer.c utility/utility.h weekplan/weekplan.o weekplan/weekplan.h
-	gcc -c randomizer/randomizer.c weekplan/weekplan.o
+	gcc -c randomizer/randomizer.c weekplan/weekplan.o\
+		-o ./randomizer/randomizer.o
 
 utility/utility.o: utility/utility.c utility/utility.h
 	gcc -c utility/utility.c \

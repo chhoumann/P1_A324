@@ -40,7 +40,7 @@ void  make_random_weekplan(void);
 void  on_invalid_input(void);
 void  print_recipe(recipe recipe, float serving_size);
 void  press_any_key_to_continue(void);
-
+void  clear_screen(void);
 int   is_file_empty(FILE *file);
 int   get_recipe_by_file_name(char *name);
 int   yes_no_prompt(void);

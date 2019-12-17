@@ -69,23 +69,23 @@ void print_weekplan_recipe(void) {
     int choice = -1;
     float serving_size;
 
-    system("cls");
+    clear_screen();
     
     print_current_weekplan();
     printf("Vaelg en opskrift (1-7) for at vise detaljer om den. Skriv '0' for at gaa tilbage.\n");
 
     choice = prompt_for_index_to_change(DAYS_IN_WEEK);
-    system("cls");
-
-    serving_size = get_serving_size();
+    clear_screen();
 
     if (choice == 0)
         return;
-    else if (choice != -1)
+    else if (choice != -1) {
+        serving_size = get_serving_size();
         print_recipe(recipe_database[weekplan[choice - 1]], serving_size);
-
+    }
+    
     press_any_key_to_continue(); 
-    system("cls");
+    clear_screen();
 }
 
 /* Change the currently saved weekplan */
@@ -97,27 +97,29 @@ void change_weekplan(void) {
         int day = 0;
         more_changes = 0;
 
-        system("cls");
+        clear_screen();
         prompt_for_weekplan_change(&day);
 
         if (day != 0) {
             /* User selected a day, ask them what meal to change */
             prompt_for_meal_to_change(&selected_meal);
 
-            /* Subtracting one from the day and selected_meal integers because it has to equal the array-indices from 0 to 6 */
-            day--; selected_meal--;
-            weekplan[day] = selected_meal;
+            if (selected_meal != 0) {
+                /* Subtracting one from the day and selected_meal integers because it has to equal the array-indices from 0 to 6 */
+                day--; selected_meal--;
+                weekplan[day] = selected_meal;
 
-            printf("\n\"%s\" er blevet erstattet med \"%s\".\n", recipe_database[weekplan[day]].name, recipe_database[selected_meal].name);        
-            printf("\nOensker du foretage flere aendringer? (y/n)\n");
+                printf("\n\"%s\" er blevet erstattet med \"%s\".\n", recipe_database[weekplan[day]].name, recipe_database[selected_meal].name);        
+                printf("\nOensker du foretage flere aendringer? (y/n)\n");
 
-            more_changes = yes_no_prompt();
+                more_changes = yes_no_prompt();
+            }
         }
     } while (more_changes == 1);
 
     /* Save changes */
     save_weekplan();
-    system("cls");
+    clear_screen();
 }
 
 /* Display the current weekplan and ask the user which recipe to replace */
@@ -133,7 +135,7 @@ void prompt_for_weekplan_change(int *day) {
 void prompt_for_meal_to_change(int *selected_meal) {
     int i;
 
-    system("cls");
+    clear_screen();
     printf("Hvilken af disse maaltider vil du erstatte?\n");
     for (i = 0; i < number_of_recipes; i++)
         printf("%2d. %s\n", i + 1, recipe_database[i].name);
@@ -143,17 +145,20 @@ void prompt_for_meal_to_change(int *selected_meal) {
 
 /* In case the weekplan already exists, we ask the user if they want to replace the current one with a new one */
 void new_weekplan_prompt(void) {
+    int make_weekplan = 0;
+
     if (weekplan_exists()) {
-        printf("Er du sikker paa, at du vil generer en ny madplan og overskrive den nuvaerende? (y/n)\n");
-        
-        if (yes_no_prompt())
-            make_random_weekplan();
+        printf("Er du sikker paa, at du vil generere en ny madplan og overskrive den nuvaerende? (y/n)\n");
+        make_weekplan = yes_no_prompt();
     } 
-    else {
+    else
+        make_weekplan = 1;
+
+    if (make_weekplan) {
         make_random_weekplan();
-        printf("Made new weekplan successfully\n");
+        printf("Success - der er blevet genereret en ny madplan.\n\n");
     }
 
     press_any_key_to_continue();
-    system("cls");
+    clear_screen();
 }

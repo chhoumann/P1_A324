@@ -137,3 +137,8 @@ float get_serving_size(void) {
     
     return choice / default_serving_size;
 }
+
+/* Clears the screen by calling the system command cls */
+void clear_screen(void) {
+    system("cls");
+}

@@ -27,7 +27,7 @@ void change_user_preferences(void) {
     int choice = -1;
 
     do {    
-        system("cls");
+        clear_screen();
 
         print_all_user_prefs();
         prompt_for_preference_to_change(&choice);
@@ -37,7 +37,7 @@ void change_user_preferences(void) {
     /* When the user chooses to exit, we save the current settings and generate a tag string */
     save_user_prefs();
     generate_user_tags();
-    system("cls");
+    clear_screen();
 }
 
 /* Runs the initial setup if the setup file is empty or does not exist */
