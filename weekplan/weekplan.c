@@ -107,11 +107,11 @@ void change_weekplan(void) {
             if (selected_meal != 0) {
                 /* Subtracting one from the day and selected_meal integers because it has to equal the array-indices from 0 to 6 */
                 day--; selected_meal--;
-                weekplan[day] = selected_meal;
 
                 printf("\n\"%s\" er blevet erstattet med \"%s\".\n", recipe_database[weekplan[day]].name, recipe_database[selected_meal].name);        
                 printf("\nOensker du foretage flere aendringer? (y/n)\n");
 
+                weekplan[day] = selected_meal;
                 more_changes = yes_no_prompt();
             }
         }
@@ -140,7 +140,7 @@ void prompt_for_meal_to_change(int *selected_meal) {
     for (i = 0; i < number_of_recipes; i++)
         printf("%2d. %s\n", i + 1, recipe_database[i].name);
 
-    *selected_meal = prompt_for_index_to_change(DAYS_IN_WEEK);
+    *selected_meal = prompt_for_index_to_change(number_of_recipes);
 }
 
 /* In case the weekplan already exists, we ask the user if they want to replace the current one with a new one */

@@ -78,7 +78,7 @@ void main_menu(void) {
             case 2: print_groceries();         break;
             case 3: change_user_preferences(); break;
             case 4: exit_program();
-            default: on_invalid_input();
+            default: clear_screen(); on_invalid_input();
         }
         menu_selector = 0;
         
@@ -105,7 +105,7 @@ void weekplan_menu(void) {
             case 2:  new_weekplan_prompt();   break;
             case 3:  change_weekplan();       break;
             case 4:  clear_screen();          return;
-            default: on_invalid_input();
+            default: clear_screen(); on_invalid_input();
         }
         menu_selector = 0;
 
