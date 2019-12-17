@@ -116,9 +116,8 @@ int check_tags_match(char *recipe_tags) {
             if (strchr(user_prefs_tags, tag) != NULL)
                 return 0;
         }
-        else if (strchr(user_prefs_tags, tag) != NULL) {
+        else if (strchr(user_prefs_tags, tag) != NULL)
             tag_matches++;
-        }
     }
 
     /* Tag matches need to match the user tags that aren't allergy tags or quick/slow meals tags 
