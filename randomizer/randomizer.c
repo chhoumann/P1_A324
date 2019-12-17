@@ -64,7 +64,7 @@ void randomizer(int sorted_recipes[], int recipe_matches) {
         /* We only need to account for duplicates if there are more than 7 recipes given the user preferences
            Otherwise, duplicates are bound to occur, about which which we notify the user in the printf below */
         if (recipe_matches >= 7)
-            while (array_contains_int(weekplan, random, DAYS_IN_WEEK))
+            while (array_contains_int(weekplan, sorted_recipes[random], DAYS_IN_WEEK))
                 random = rand() % recipe_matches;
 
         weekplan[i] = sorted_recipes[random];      
