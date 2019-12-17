@@ -7,8 +7,8 @@
 #include "../weekplan/weekplan.h"
 
 /* Prototype methods */
-recipe *discard_recipes_by_tags(int *recipe_matches); 
-void randomizer(recipe sorted_recipes[], int recipe_matches);
+int *discard_recipes_by_tags(int *recipe_matches); 
+void randomizer(int sorted_recipes[], int recipe_matches);
 int check_tags_match(char *recipe_tags);
 int array_contains_int(int array[], int value, int array_size);
 
@@ -16,7 +16,7 @@ int array_contains_int(int array[], int value, int array_size);
 int make_random_weekplan(void) {
     int recipe_matches = 0, i;
 
-    recipe *sorted_recipes = discard_recipes_by_tags(&recipe_matches);
+    int *sorted_recipes = discard_recipes_by_tags(&recipe_matches);
 
     /* Sanity check in case no recipes are found with the given user preferences */
     if (recipe_matches == 0) {
@@ -38,14 +38,14 @@ int make_random_weekplan(void) {
 
 /* Sorts out the recipes that match user tags and allocates them to array sort_recipes. Returns the array. */
 /* Counts the number of recipe matches via a pointer to recipes_matches */
-recipe *discard_recipes_by_tags(int *recipe_matches) {
+int *discard_recipes_by_tags(int *recipe_matches) {
     int i;
   
-    recipe *sorted_recipes = calloc(sizeof(recipe), number_of_recipes);
+    int *sorted_recipes = calloc(sizeof(int), number_of_recipes);
 
     for (i = 0; i < number_of_recipes; i++) {
         if (check_tags_match(recipe_database[i].tags)) {   
-            sorted_recipes[*recipe_matches] = recipe_database[i];     
+            sorted_recipes[*recipe_matches] = i;     
             (*recipe_matches)++;
         }
     }
@@ -55,7 +55,7 @@ recipe *discard_recipes_by_tags(int *recipe_matches) {
 
 /* Randomizes the indices in sorted_recipes and allocates 7 recipes into weekly_schedule.
    Duplicates are accounted for in array_contains_int */
-void randomizer(recipe sorted_recipes[], int recipe_matches) {
+void randomizer(int sorted_recipes[], int recipe_matches) {
     int i;
 
     for (i = 0; i < 7; i++) {
@@ -67,7 +67,7 @@ void randomizer(recipe sorted_recipes[], int recipe_matches) {
             while (array_contains_int(weekplan, random, DAYS_IN_WEEK))
                 random = rand() % recipe_matches;
 
-        weekplan[i] = random;      
+        weekplan[i] = sorted_recipes[random];      
     }
 
     if (recipe_matches < 7)
@@ -116,8 +116,9 @@ int check_tags_match(char *recipe_tags) {
             if (strchr(user_prefs_tags, tag) != NULL)
                 return 0;
         }
-        else if (strchr(user_prefs_tags, tag) != NULL)
+        else if (strchr(user_prefs_tags, tag) != NULL) {
             tag_matches++;
+        }
     }
 
     /* Tag matches need to match the user tags that aren't allergy tags or quick/slow meals tags 
