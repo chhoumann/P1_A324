@@ -56,7 +56,7 @@ void check_setup(void) {
 void initial_setup(void) {
     printf("Velkommen! Foer vi gaar i gang, skal vi lige vide, om du har nogle allergier.\n");
     check_allergy("Har du glutenallergi? (y/n) ", &saved_user_prefs.gluten_allergy);
-    check_allergy("Er du laktose intolerant? (y/n) ", &saved_user_prefs.lactose_intolerance);
+    check_allergy("Er du laktoseintolerant? (y/n) ", &saved_user_prefs.lactose_intolerance);
     check_allergy("Har du noeddeallergi? (y/n) ", &saved_user_prefs.nut_allergy);
     
     /* Set default values on initial run */
@@ -121,14 +121,14 @@ void print_user_pref_value(int index, char *text, int pref_value) {
 
 /* Calls a print for every user preferences  */
 void print_all_user_prefs(void) {
-    print_user_pref_value(1, "Jeg har gluten allergi", saved_user_prefs.gluten_allergy);
-    print_user_pref_value(2, "Jeg har laktose intolerans", saved_user_prefs.lactose_intolerance);
-    print_user_pref_value(3, "Jeg har noedeallergi", saved_user_prefs.nut_allergy);
+    print_user_pref_value(1, "Jeg har glutenallergi", saved_user_prefs.gluten_allergy);
+    print_user_pref_value(2, "Jeg har laktoseintolerans", saved_user_prefs.lactose_intolerance);
+    print_user_pref_value(3, "Jeg har noeddeallergi", saved_user_prefs.nut_allergy);
     print_user_pref_value(4, "Jeg foretraekker kun veganske maaltider", saved_user_prefs.vegan);
-    print_user_pref_value(5, "Jeg foretraekker kun maaltider med under 20 minutters tilberedelsestid", saved_user_prefs.quick_meals);
-    print_user_pref_value(6, "Jeg foretraekker kun maaltider med over 20 minutters tilberedelsestid", saved_user_prefs.slow_meals);
-    print_user_pref_value(7, "Jeg foretraekker kun maaltider med hoejt protein indhold", saved_user_prefs.high_protein);
-    print_user_pref_value(8, "Jeg foretraekker kun maaltider med lavt fedt inhold", saved_user_prefs.low_fat);
+    print_user_pref_value(5, "Jeg foretraekker kun maaltider med under 20 minutters tilberedningstid", saved_user_prefs.quick_meals);
+    print_user_pref_value(6, "Jeg foretraekker kun maaltider med over 20 minutters tilberedningstid", saved_user_prefs.slow_meals);
+    print_user_pref_value(7, "Jeg foretraekker kun maaltider med hoejt proteinindhold", saved_user_prefs.high_protein);
+    print_user_pref_value(8, "Jeg foretraekker kun maaltider med lavt fedtindhold", saved_user_prefs.low_fat);
     printf("\n");
 }
 

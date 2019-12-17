@@ -4,6 +4,8 @@
 #include "../utility/utility.h"
 #include "database.h"
 
+#define TXT_EXTENSION_LENGTH 4
+
 /* The directory name is global to allow ease of access without parameter transfers across files */
 const char *database_dir_name = "./recipes/";
 
@@ -60,7 +62,7 @@ recipe get_recipe_data(FILE *fp, const char *file_name) {
 
     /* Set file_name of the recipe struct without the .txt extension (so it's easier to look up) */
     recipe.file_name = calloc(strlen(file_name) + 1, sizeof(char));
-    strncpy(recipe.file_name, file_name, strlen(file_name) - 4);
+    strncpy(recipe.file_name, file_name, strlen(file_name) - TXT_EXTENSION_LENGTH);
 
     /* Copy the items into the struct */
     strcpy(recipe.name, name_buffer);

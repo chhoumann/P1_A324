@@ -24,7 +24,7 @@ int weekplan_exists(void) {
 
 /* Loads a weekplan from the saved_weekplan.txt file using get_recipe_by_file_name
    (returns the index of the recipe in the database) */
-int *load_weekplan(void) {
+void load_weekplan(void) {
     FILE *weekplan_file = fopen(weekplan_directory, "r");
     char recipe_name[MAX_RECIPE_NAME_LENGTH];
     int i;
@@ -38,8 +38,6 @@ int *load_weekplan(void) {
     }
 
     fclose(weekplan_file);
-
-    return weekplan;
 }
 
 /* Saves a weekplan to the .txt file using integers and accesing the database 
@@ -136,7 +134,7 @@ void prompt_for_meal_to_change(int *selected_meal) {
     int i;
 
     clear_screen();
-    printf("Hvilken af disse maaltider vil du erstatte?\n");
+    printf("Hvilket af disse maaltider vil du erstatte?\n");
     for (i = 0; i < number_of_recipes; i++)
         printf("%2d. %s\n", i + 1, recipe_database[i].name);
 

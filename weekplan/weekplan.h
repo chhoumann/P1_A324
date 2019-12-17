@@ -3,7 +3,7 @@ int *weekplan;
 
 /* Global prototypes */
 int  weekplan_exists(void);
-int  *load_weekplan(void);
+void load_weekplan(void);
 void save_weekplan(void);
 void print_weekplan_recipe(void);
 void change_weekplan(void);

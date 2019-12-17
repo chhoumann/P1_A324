@@ -91,7 +91,7 @@ int array_contains_int(int array[], int value, int array_size) {
    i.e. any recipe with gluten will be discarded if the user tags contain the gluten tag
    The name is due to the fact that if this tag is present the recipe is not usable. So if the recipe is not
    in accordance (i.e. contains gluten) with the tag, it will be discarded */
-int is_not_tag(char tag) {
+int is_special_tag(char tag) {
     return (tag == GLUTEN_TAG || tag == LACTOSE_TAG || tag == NUT_TAG
     || tag == QUICK_MEALS_TAG || tag == SLOW_MEALS_TAG);
 }
@@ -105,13 +105,13 @@ int check_tags_match(char *recipe_tags) {
     /* Tags to match with the user preferences should not contain allergy tags or quick/slow tags */
     for (i = 0; i < strlen(user_prefs_tags); i++) {
         char tag = user_prefs_tags[i];
-        if (is_not_tag(tag))
+        if (is_special_tag(tag))
             tags_to_match--;
     }
     
     for (i = 0; i < num_recipe_tags; i++) {
         char tag = recipe_tags[i];
-        if (is_not_tag(tag)) {
+        if (is_special_tag(tag)) {
             /* Recipe contains i.e. an allergy tag and is discarded instantly */
             if (strchr(user_prefs_tags, tag) != NULL)
                 return 0;
@@ -122,6 +122,6 @@ int check_tags_match(char *recipe_tags) {
 
     /* Tag matches need to match the user tags that aren't allergy tags or quick/slow meals tags 
        i.e. if a recipe contains only the low fat tag and the user has specified only this as a preference
-       from the list of tags not present in "is_not_tags", both values will be 1 so the recipe is kept */
+       from the list of tags not present in "is_special_tags", both values will be 1 so the recipe is kept */
     return tag_matches == tags_to_match;
 }
